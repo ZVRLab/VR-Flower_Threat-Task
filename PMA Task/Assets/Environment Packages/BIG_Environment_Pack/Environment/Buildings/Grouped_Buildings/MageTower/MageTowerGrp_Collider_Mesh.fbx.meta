@@ -1,0 +1,91 @@
+fileFormatVersion: 2
+guid: 38cd9a603f459f948a90a1e7a119f783
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: MT_spiralstairs
+    100002: MT_Brace_Stones
+    100004: MageTower
+    100006: Bridge
+    100008: MT_roof
+    100010: MT_Planks
+    100012: //RootNode
+    400000: MT_spiralstairs
+    400002: MT_Brace_Stones
+    400004: MageTower
+    400006: Bridge
+    400008: MT_roof
+    400010: MT_Planks
+    400012: //RootNode
+    2300000: MT_spiralstairs
+    2300002: MT_Brace_Stones
+    2300004: MageTower
+    2300006: Bridge
+    2300008: MT_roof
+    2300010: MT_Planks
+    3300000: MT_spiralstairs
+    3300002: MT_Brace_Stones
+    3300004: MageTower
+    3300006: Bridge
+    3300008: MT_roof
+    3300010: MT_Planks
+    4300000: Cube
+    4300002: MT_Planks
+    4300004: MT_spiralstairs
+    4300006: MT_roof
+    4300008: MageTower
+    4300010: MT_Brace_Stones
+    4300012: Bridge
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  userData: 
