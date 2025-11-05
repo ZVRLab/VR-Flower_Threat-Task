@@ -19,6 +19,8 @@ public class TrialManager : MonoBehaviour
     public OreMiner oreMiner;
     public PlayerDataLogging dataLogger;
     public RecordPlayerMovement movementRecorder;
+    //UDPSender comunicator
+	public UDPSender U;
    
 
     [Header("Environment")]
@@ -38,7 +40,10 @@ public class TrialManager : MonoBehaviour
     private bool playerInMining = false;
 
     void Start()
-    {
+    { 
+        //UDP sender code G for start cue
+        UDPSender.sendString("G");
+        
         // Randomly assign 40 trials as storm trials
         stormTrials = new bool[totalTrials];
         List<int> stormIndices = new List<int>();
@@ -136,6 +141,8 @@ public class TrialManager : MonoBehaviour
     // Play warning immediately if this is a storm trial and have storm clouds roll in
     if (stormActive)
     {
+        //UDP sender code G for storm cue
+        UDPSender.sendString("G");
         warningSound.Play();
         stormClouds.Play();
         StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, trialDuration));
@@ -174,11 +181,15 @@ if (stormActive)
     yield return new WaitForFixedUpdate();
 
     if (!playerInShelter) {
+ //sends message to UDPServer script for shock
+ UDPSender.sendString("S");	        
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
     }
     else {
         shocked = false;
+        //sends message to UDPServer script for safe (neutral)
+        UDPSender.sendString("N");	
     }
         
 }

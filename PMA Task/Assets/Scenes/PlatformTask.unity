@@ -256,6 +256,7 @@ MonoBehaviour:
   oreMiner: {fileID: 1908789159}
   dataLogger: {fileID: 1783216904}
   movementRecorder: {fileID: 212339098}
+  U: {fileID: 0}
   miningArea: {fileID: 1908789160}
   shelterArea: {fileID: 226328553}
   directionalLight: {fileID: 869163828}
@@ -618,6 +619,50 @@ RectTransform:
   m_AnchoredPosition: {x: 850, y: -5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &364682181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 364682183}
+  - component: {fileID: 364682182}
+  m_Layer: 0
+  m_Name: UDPSender
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &364682182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364682181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4f648e60cfbb74b8896a9e4cf8c691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UDPSender
+--- !u!4 &364682183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364682181}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 163.34471, y: 0.31012, z: 382.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &374323185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1148,7 +1193,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 160, y: -40}
+  m_AnchoredPosition: {x: 360, y: -131}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &708740722
@@ -12006,6 +12051,7 @@ MonoBehaviour:
   mineCooldown: 1
   pointsThisTrial: 0
   scoreUI: {fileID: 456497161}
+  U: {fileID: 0}
   isExpectancyActive: 0
 --- !u!65 &1908789160
 BoxCollider:
@@ -12131,3 +12177,4 @@ SceneRoots:
   - {fileID: 1783216905}
   - {fileID: 212339099}
   - {fileID: 652503258}
+  - {fileID: 364682183}

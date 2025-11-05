@@ -11,7 +11,8 @@ public class OreMiner : MonoBehaviour
     [Header("References")]
     public ScoreUI scoreUI;               // Assign in Inspector
     private bool canMine = false;         // Is player inside mining zone?
-    
+      //UDPSender comunicator
+	public UDPSender U;
     
     public bool isExpectancyActive = false; //Can't accidentally mine when making expectancy selection
 
@@ -31,6 +32,8 @@ public class OreMiner : MonoBehaviour
     {
         pointsThisTrial++;
         lastMineTime = Time.time;
+        //UDP sender code G for storm cue
+        UDPSender.sendString("M");
 
         // Update the UI
         if (scoreUI != null)
