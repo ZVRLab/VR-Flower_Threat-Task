@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using StarterAssets;
+using System;
+using System.IO;
 
 public class TrialManager : MonoBehaviour
 {
@@ -49,7 +51,7 @@ public class TrialManager : MonoBehaviour
         List<int> stormIndices = new List<int>();
         while (stormIndices.Count < stormCount)
         {
-            int idx = Random.Range(0, totalTrials);
+            int idx = UnityEngine.Random.Range(0, totalTrials);
             if (!stormIndices.Contains(idx))
                 stormIndices.Add(idx);
         }
@@ -101,6 +103,9 @@ public class TrialManager : MonoBehaviour
 
     // Store the value for logging
     expectancyValue = expectancyUI.expectancyValue;
+    StreamWriter sw = new StreamWriter("ExpectancyRatingFile", true);
+    sw.WriteLine("{0}, {1}, Expectancy {2}", Time.time, DateTime.Now, expectancyValue);
+    sw.Close();
 
     // Hide the panel and re-enable movement and mining
     expectancyPanel.SetActive(false);
