@@ -12154,6 +12154,7 @@ MonoBehaviour:
   pointsThisTrial: 0
   scoreUI: {fileID: 456497161}
   U: {fileID: 0}
+  trialManager: {fileID: 17980180}
   isExpectancyActive: 0
 --- !u!65 &1908789160
 BoxCollider:

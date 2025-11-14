@@ -274,12 +274,28 @@ public void SetPlayerInShelter(bool inside)
     {
         playerInShelter = inside;
         Debug.Log("Shelter status: " + inside);
+
+        //Record when player enters or exits the shelter
+        string enterexitPath = Path.Combine(desktopPath, "EnterExit.txt"); 
+        string shelterState = inside ? "ENTER" : "EXIT";
+    using (StreamWriter sw = new StreamWriter(enterexitPath, true))
+    {
+        sw.WriteLine("{0}, {1}, {2} Shelter", Time.time, DateTime.Now, shelterState);
+    }
     }
 
     public void SetPlayerInMining(bool inside)
     {
         playerInMining = inside;
         Debug.Log("Mining status: " + inside);
+
+      //Record when player enters or exits the mine
+      string enterexitPath = Path.Combine(desktopPath, "EnterExit.txt"); 
+        string mineState = inside ? "ENTER" : "EXIT";
+    using (StreamWriter sw = new StreamWriter(enterexitPath, true))
+    {
+        sw.WriteLine("{0}, {1}, {2} Mine", Time.time, DateTime.Now, mineState);
+    }
     }
   // Smoothly fade the directional light intensity during a storm trial
     IEnumerator FadeLightIntensity(Light light, float start, float end, float duration)
