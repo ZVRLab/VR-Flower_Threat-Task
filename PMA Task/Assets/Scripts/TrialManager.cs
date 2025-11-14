@@ -23,6 +23,8 @@ public class TrialManager : MonoBehaviour
     public RecordPlayerMovement movementRecorder;
     //UDPSender comunicator
 	public UDPSender U;
+    //Path to desktop for .txt files
+    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
    
 
     [Header("Environment")]
@@ -103,9 +105,11 @@ public class TrialManager : MonoBehaviour
 
     // Store the value for logging
     expectancyValue = expectancyUI.expectancyValue;
-    StreamWriter sw = new StreamWriter("ExpectancyRatingFile", true);
+    string expectancyPath = Path.Combine(desktopPath, "ExpectancyRatingFile.txt");
+    using (StreamWriter sw = new StreamWriter(expectancyPath, true))
+{
     sw.WriteLine("{0}, {1}, Expectancy {2}", Time.time, DateTime.Now, expectancyValue);
-    sw.Close();
+}
 
     // Hide the panel and re-enable movement and mining
     expectancyPanel.SetActive(false);
