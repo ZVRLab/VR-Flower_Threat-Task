@@ -25,6 +25,7 @@ public class TrialManager : MonoBehaviour
 	public UDPSender U;
     //Path to desktop for .txt files
     string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+    public int CurrentTrial => currentTrial;
    
 
     [Header("Environment")]
@@ -202,8 +203,8 @@ if (stormActive)
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
     //Document when the shock happened
-    string stormPath = Path.Combine(desktopPath, "ShockFile.txt");
-    using (StreamWriter sw = new StreamWriter(stormPath, true))
+    string shockPath = Path.Combine(desktopPath, "ShockFile.txt");
+    using (StreamWriter sw = new StreamWriter(shockPath, true))
     {
         sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
     }

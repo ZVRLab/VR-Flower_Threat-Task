@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using System.IO;
 
 public class OreMiner : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class OreMiner : MonoBehaviour
     private bool canMine = false;         // Is player inside mining zone?
       //UDPSender comunicator
 	public UDPSender U;
+        //Path to desktop for .txt files
+    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+    public TrialManager trialManager;
     
     public bool isExpectancyActive = false; //Can't accidentally mine when making expectancy selection
 
@@ -34,6 +39,13 @@ public class OreMiner : MonoBehaviour
         lastMineTime = Time.time;
         //UDP sender code G for storm cue
         UDPSender.sendString("M");
+        //Document when the point was added
+         string pointPath = Path.Combine(desktopPath, "PointAddedFile.txt");
+         int trialNum = trialManager.CurrentTrial;
+    using (StreamWriter sw = new StreamWriter(pointPath, true))
+{
+    sw.WriteLine("{0}, {1}, Points {2}, Trial {3}", Time.time, DateTime.Now, pointsThisTrial, trialNum + 1); //(Added a point to trial because it started at 0)
+}
 
         // Update the UI
         if (scoreUI != null)
