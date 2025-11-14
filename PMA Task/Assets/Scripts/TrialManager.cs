@@ -155,6 +155,13 @@ public class TrialManager : MonoBehaviour
         warningSound.Play();
         stormClouds.Play();
         StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, trialDuration));
+
+        //Document when the storm happened
+    string stormPath = Path.Combine(desktopPath, "StormFile.txt");
+    using (StreamWriter sw = new StreamWriter(stormPath, true))
+    {
+        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
+    }
     }
 
     while (timer < trialDuration)

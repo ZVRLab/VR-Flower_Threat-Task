@@ -12,7 +12,7 @@ public class PlayerDataLogging : MonoBehaviour
     void Start()
     {
         // File name: pmaDataLog_MM_DD_YYYY.txt
-        string fileName = "pmaDataLog_" + DateTime.Now.ToString("MM_dd_yyyy") + ".txt";
+        string fileName = "Summary" + DateTime.Now.ToString("MM_dd_yyyy") + ".txt";
         // Save to desktop
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         filePath = Path.Combine(desktopPath, fileName);
