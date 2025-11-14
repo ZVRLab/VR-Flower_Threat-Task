@@ -201,6 +201,12 @@ if (stormActive)
  UDPSender.sendString("S");	        
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
+    //Document when the shock happened
+    string stormPath = Path.Combine(desktopPath, "ShockFile.txt");
+    using (StreamWriter sw = new StreamWriter(stormPath, true))
+    {
+        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
+    }
     }
     else {
         shocked = false;
