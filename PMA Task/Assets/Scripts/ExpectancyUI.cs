@@ -40,7 +40,7 @@ public class ExpectancyUI : MonoBehaviour
 
     void UpdateExpectancyText()
     {
-        expectancyText.text = "Do you expect to stay mining or go to the shelter?: " + expectancyValue.ToString();
+        expectancyText.text = "How likely are you to mine?: " + expectancyValue.ToString();
     }
 
     public void ResetExpectancy()
