@@ -33,6 +33,7 @@ public class TrialManager : MonoBehaviour
     public Collider shelterArea;
     public Light directionalLight;
 
+    [Header("Setup")]
     private int currentTrial = 0;
     private int expectancyValue = 5;
     private bool[] stormTrials;
