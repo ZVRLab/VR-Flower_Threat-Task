@@ -13,8 +13,7 @@ public class TrialManager : MonoBehaviour
     public float trialDuration = 30f; // seconds per trial
     public int stormCount = 40;
 
-    [Header("References")]
-    public GameObject expectancyPanel;
+    [Header("References")]    public GameObject expectancyPanel;
     public FirstPersonController playerController; // disable/enable movement script
     public AudioSource warningSound;
     public ParticleSystem stormClouds;
@@ -50,7 +49,7 @@ public class TrialManager : MonoBehaviour
         //UDP sender code G for start cue
         UDPSender.sendString("G");
         
-        // Randomly assign 40 trials as storm trials
+        // Randomly assign storm trials
         stormTrials = new bool[totalTrials];
         List<int> stormIndices = new List<int>();
         while (stormIndices.Count < stormCount)
@@ -65,14 +64,14 @@ public class TrialManager : MonoBehaviour
         StartCoroutine(RunTrials());
     }
 
+    /**************************************************************************
+     * CHANGE: Removed expectancy prompt from beginning of each trial
+     **************************************************************************/
     IEnumerator RunTrials()
     {
         for (currentTrial = 0; currentTrial < totalTrials; currentTrial++)
         {
-            // ---- Phase 1: Expectancy ----
-            yield return StartCoroutine(DoExpectancy());
-
-            // ---- Phase 2: Mining (with possible storm) ----
+            // ---- Run the trial (expectancy will show during storm if it happens) ----
             yield return StartCoroutine(DoTrial(currentTrial));
         }
 
@@ -124,10 +123,9 @@ public class TrialManager : MonoBehaviour
         float timer = 0f;
         bool stormActive = stormTrials[trialNum];
         bool shocked = false;
-        timeSpentMining = 0f; //Reset time spent mining at start of each trial
-        timeInShelter = 0f; //Reset time in shelter at start of each trial
+        timeSpentMining = 0f;
+        timeInShelter = 0f;
 
-       //Start movement recording 
         movementRecorder.StartRecording(trialNum + 1, stormActive);   
 
     // Initial Behavior Code (where they were when the trial started)
@@ -142,11 +140,14 @@ public class TrialManager : MonoBehaviour
             initialBehavior = 2;
         }
     
+    /**************************************************************************
+     * CHANGE: Commented out ResetMiner() to keep points continuous
+     **************************************************************************/
     //Reset miner points at the start of trial
-        if(oreMiner !=null) 
-        {
-            oreMiner.ResetMiner();
-        }
+        // if(oreMiner !=null) 
+        // {
+        //     oreMiner.ResetMiner();
+        // }
 
     
     // Play warning immediately if this is a storm trial and have storm clouds roll in
@@ -164,6 +165,13 @@ public class TrialManager : MonoBehaviour
     {
         sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
     }
+        
+        /**************************************************************************
+         * MODIFIED: 11/27/2025
+         * CHANGE: Added expectancy prompt here (after storm warning plays)
+         * REASON: Prompt should appear when storm happens, not at trial start
+         **************************************************************************/
+        yield return StartCoroutine(DoExpectancy());
     }
 
     while (timer < trialDuration)
@@ -193,14 +201,14 @@ public class TrialManager : MonoBehaviour
     movementRecorder.StopRecording();
 
     // Now that the trial has truly ended, check for shock
-if (stormActive)
-{
-    // Wait one physics frame to ensure trigger updates have processed
-    yield return new WaitForFixedUpdate();
+    if (stormActive)
+    {
+        // Wait one physics frame to ensure trigger updates have processed
+        yield return new WaitForFixedUpdate();
 
-    if (!playerInShelter) {
- //sends message to UDPServer script for shock
- UDPSender.sendString("S");	        
+        if (!playerInShelter) {
+    //sends message to UDPServer script for shock
+    UDPSender.sendString("S");	        
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
     //Document when the shock happened
@@ -210,13 +218,12 @@ yield return StartCoroutine(ApplyShocks());
         sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
     }
     }
-    else {
-        shocked = false;
-        //sends message to UDPServer script for safe (neutral)
-        UDPSender.sendString("N");	
+        else {
+            shocked = false;
+            //sends message to UDPServer script for safe (neutral)
+            UDPSender.sendString("N");	
+        }
     }
-        
-}
 
     //Stop particle effect (storm clouds) when trial ends
     if(stormActive && stormClouds !=null) {
