@@ -34,6 +34,7 @@ public class TrialManager : MonoBehaviour
     //Path to desktop for .txt files
     string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
     public int CurrentTrial => currentTrial;
+    public Vector3 playerPosition;
    
 
     [Header("Environment")]
@@ -69,6 +70,16 @@ public class TrialManager : MonoBehaviour
         stormTrials[i] = true;
 
         StartCoroutine(RunTrials());
+    }
+
+ /**************************************************************************
+     * CHANGE: Added Update to get player's location
+     * Reason: To put in StreamWriter statements when events happen
+     * Modified: 12/12/25 by SD
+     **************************************************************************/
+    void Update()
+    {
+        playerPosition = playerController.transform.position;
     }
 
     IEnumerator RunTrials()
@@ -132,7 +143,7 @@ public class TrialManager : MonoBehaviour
     string stormPath = Path.Combine(desktopPath, "StormFile.txt");
     using (StreamWriter sw = new StreamWriter(stormPath, true))
     {
-        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
+        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2}", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
 
@@ -163,7 +174,7 @@ yield return StartCoroutine(ApplyShocks());
     string shockPath = Path.Combine(desktopPath, "ShockFile.txt");
     using (StreamWriter sw = new StreamWriter(shockPath, true))
     {
-        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
+        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2}", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
         else {
@@ -242,7 +253,7 @@ yield return StartCoroutine(ApplyShocks());
     string expectancyPath = Path.Combine(desktopPath, "ExpectancyRatingFile.txt");
     using (StreamWriter sw = new StreamWriter(expectancyPath, true))
 {
-    sw.WriteLine("{0}, {1}, Expectancy {2}", Time.time, DateTime.Now, expectancyValue);
+    sw.WriteLine("{0}, {1}, Expectancy {2}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
 }
 
     // Hide the panel and re-enable movement and mining
@@ -339,7 +350,7 @@ public void SetPlayerInShelter(bool inside)
         string shelterState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
-        sw.WriteLine("{0}, {1}, {2} Shelter", Time.time, DateTime.Now, shelterState);
+        sw.WriteLine("{0}, {1}, {2} Shelter, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, shelterState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
 
@@ -353,7 +364,7 @@ public void SetPlayerInShelter(bool inside)
         string mineState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
-        sw.WriteLine("{0}, {1}, {2} Mine", Time.time, DateTime.Now, mineState);
+        sw.WriteLine("{0}, {1}, {2} Mine, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, mineState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
   // Smoothly fade the directional light intensity during a storm trial
