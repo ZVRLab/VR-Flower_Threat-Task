@@ -9,9 +9,18 @@ using System.IO;
 public class TrialManager : MonoBehaviour
 {
     [Header("Trial Settings")]
-    public int totalTrials = 80;
-    public float trialDuration = 30f; // seconds per trial
-    public int stormCount = 40;
+    public int totalTrials = 40;
+        /**************************************************************************
+     * CHANGE: Add ranges for free movement and decision movement times
+     * Reason: Jittered time ranges
+     * Modified: 12/12/25 by SD
+     **************************************************************************/
+    //15-20 for free movement
+    public float freeMovementMin = 15f;
+    public float freeMovementMax = 20f;
+    //12-15 sec for decision movement
+    public float stormDurationMin = 12f;
+    public float stormDurationMax= 15f;
 
     [Header("References")]    public GameObject expectancyPanel;
     public FirstPersonController playerController; // disable/enable movement script
@@ -49,28 +58,24 @@ public class TrialManager : MonoBehaviour
         //UDP sender code G for start cue
         UDPSender.sendString("G");
         
-        // Randomly assign storm trials
-        stormTrials = new bool[totalTrials];
-        List<int> stormIndices = new List<int>();
-        while (stormIndices.Count < stormCount)
-        {
-            int idx = UnityEngine.Random.Range(0, totalTrials);
-            if (!stormIndices.Contains(idx))
-                stormIndices.Add(idx);
-        }
-        foreach (int idx in stormIndices)
-            stormTrials[idx] = true;
+    /**************************************************************************
+     * CHANGE: Assign all trials as storm trials
+     * Reason: No reason for non-storm trials
+     * Modified: 12/12/25 by SD
+     **************************************************************************/
+    // All trials are storm trials
+    stormTrials = new bool[totalTrials];
+    for (int i = 0; i < totalTrials; i++)
+        stormTrials[i] = true;
 
         StartCoroutine(RunTrials());
     }
 
-    /**************************************************************************
-     * CHANGE: Removed expectancy prompt from beginning of each trial
-     **************************************************************************/
     IEnumerator RunTrials()
     {
         for (currentTrial = 0; currentTrial < totalTrials; currentTrial++)
         {
+          
             // ---- Run the trial (expectancy will show during storm if it happens) ----
             yield return StartCoroutine(DoTrial(currentTrial));
         }
@@ -80,7 +85,135 @@ public class TrialManager : MonoBehaviour
             Debug.Log(line);
     }
 
-    IEnumerator DoExpectancy() //Have the participant input their expectancy rating 
+    IEnumerator DoTrial(int trialNum) //Each trial: Free movement -> Storm sound -> Expectancy -> Decision movement -> Possible shock
+    {
+        float timer = 0f;
+        bool stormActive = stormTrials[trialNum];
+        bool shocked = false;
+        timeSpentMining = 0f;
+        timeInShelter = 0f;
+       float stormDuration = UnityEngine.Random.Range(stormDurationMin, stormDurationMax);
+    float freeMovementDuration = UnityEngine.Random.Range(freeMovementMin, freeMovementMax);
+
+        movementRecorder.StartRecording(trialNum + 1, stormActive);   
+
+    // Initial Behavior Code (where they were when the trial started)
+    // 0 = other, 1 = house, 2 = mining
+    int initialBehavior = 0;
+        if (playerInShelter)
+        {
+            initialBehavior = 1;
+        }
+        else if (playerInMining)
+        {
+            initialBehavior = 2;
+        }
+    
+    /**************************************************************************
+     * CHANGE: Free movement added to start of each trial before storm sound and expectancy
+     MODIFIED: 12/12/2025
+     **************************************************************************/
+     //PHASE 1 - FREE MOVEMENT ******************************************************
+    yield return StartCoroutine(DoFreeMovement(freeMovementDuration));
+    Debug.Log("Free movement duration = " + freeMovementDuration);
+
+
+    //PHASE 2 - STORM WARNING ******************************************************
+    // Play warning immediately if this is a storm trial and have storm clouds roll in
+    if (stormActive)
+    {
+        //UDP sender code G for storm cue
+        UDPSender.sendString("G");
+        warningSound.Play();
+        stormClouds.Play();
+        StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
+
+        //Document when the storm sound happened
+    string stormPath = Path.Combine(desktopPath, "StormFile.txt");
+    using (StreamWriter sw = new StreamWriter(stormPath, true))
+    {
+        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
+    }
+    }
+
+    // PHASE 3 - EXPECTANCY RATING ******************************************************
+    yield return StartCoroutine(DoExpectancy());
+
+    /**************************************************************************
+     * CHANGE: Decision movement made as a Coroutine method
+     MODIFIED: 12/12/2025 by SD
+     **************************************************************************/
+    //PHASE 4 - DECISION MOVEMENT ******************************************************
+   yield return StartCoroutine(DoDecisionMovement(stormDuration));
+   Debug.Log("Decision movement duration = " + stormDuration);
+
+    //PHASE 5 - SHOCK EVALUATION ******************************************************
+    // Now that the trial has truly ended, check for shock
+    if (stormActive)
+    {
+        // Wait one physics frame to ensure trigger updates have processed
+        yield return new WaitForFixedUpdate();
+
+        if (!playerInShelter) {
+    //sends message to UDPServer script for shock
+    UDPSender.sendString("S");	        
+yield return StartCoroutine(ApplyShocks());
+    shocked = true;
+    //Document when the shock happened
+    string shockPath = Path.Combine(desktopPath, "ShockFile.txt");
+    using (StreamWriter sw = new StreamWriter(shockPath, true))
+    {
+        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
+    }
+    }
+        else {
+            shocked = false;
+            //sends message to UDPServer script for safe (neutral)
+            UDPSender.sendString("N");	
+        }
+    }
+
+    //PHASE 6 - END TRIAL AND RECORD ******************************************************
+    // Stop recording movement when trial ends
+    movementRecorder.StopRecording();
+
+    //Stop particle effect (storm clouds) when trial ends
+    if(stormActive && stormClouds !=null) {
+        stormClouds.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+         // Restore brightness after storm ends
+            if (directionalLight != null)
+                StartCoroutine(FadeLightIntensity(directionalLight, 1.0f, 1.4f, 2f));
+    }
+
+    // Final behavior code 
+    // 0 = other, 1 = house, 2 = mining
+    int finalBehavior = 0;
+    if (playerInShelter) {
+        finalBehavior = 1;
+    }
+    else if (playerInMining) {
+        finalBehavior = 2;
+    }
+
+    // --- Log trial ---
+    dataLogger.LogTrial(
+        trialNum + 1,                // trial #
+        stormActive,                 // storm present (Y/N)
+        shocked,                      //Whether they got shocked
+        expectancyValue,             // expectancy (0–9)
+        initialBehavior,             //Where they were when trial started
+        finalBehavior,               // Where they were when trial ended
+        oreMiner.pointsThisTrial,     // points earned
+        timeSpentMining,             // Tracked above in the trial loop
+        timeInShelter,                //Tracked in the trial loop
+        timeNotInZones              //Time not in shelter or mine. Tracked in trial loop
+    );
+
+    // Save immediately so progress is never lost
+    dataLogger.SaveLog();
+    }
+
+ IEnumerator DoExpectancy() //Have the participant input their expectancy rating 
 {
         // Disable movement
         playerController.enabled = false;
@@ -118,63 +251,43 @@ public class TrialManager : MonoBehaviour
         oreMiner.isExpectancyActive = false;
 }
 
-    IEnumerator DoTrial(int trialNum)
+    /**************************************************************************
+         * MODIFIED: 12/12/2025
+         * CHANGE: Added free movement method
+         * REASON: Participants should have time to roam and mine freely before storm sound
+         **************************************************************************/
+
+    IEnumerator DoFreeMovement(float duration) //Have participants roam and mine freely before storm sound
     {
         float timer = 0f;
-        bool stormActive = stormTrials[trialNum];
-        bool shocked = false;
-        timeSpentMining = 0f;
-        timeInShelter = 0f;
-
-        movementRecorder.StartRecording(trialNum + 1, stormActive);   
-
-    // Initial Behavior Code (where they were when the trial started)
-    // 0 = other, 1 = house, 2 = mining
-    int initialBehavior = 0;
-        if (playerInShelter)
-        {
-            initialBehavior = 1;
-        }
-        else if (playerInMining)
-        {
-            initialBehavior = 2;
-        }
-    
-    /**************************************************************************
-     * CHANGE: Commented out ResetMiner() to keep points continuous
-     **************************************************************************/
-    //Reset miner points at the start of trial
-        // if(oreMiner !=null) 
-        // {
-        //     oreMiner.ResetMiner();
-        // }
-
-    
-    // Play warning immediately if this is a storm trial and have storm clouds roll in
-    if (stormActive)
-    {
-        //UDP sender code G for storm cue
-        UDPSender.sendString("G");
-        warningSound.Play();
-        stormClouds.Play();
-        StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, trialDuration));
-
-        //Document when the storm happened
-    string stormPath = Path.Combine(desktopPath, "StormFile.txt");
-    using (StreamWriter sw = new StreamWriter(stormPath, true))
-    {
-        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
-    }
         
-        /**************************************************************************
-         * MODIFIED: 11/27/2025
-         * CHANGE: Added expectancy prompt here (after storm warning plays)
-         * REASON: Prompt should appear when storm happens, not at trial start
-         **************************************************************************/
-        yield return StartCoroutine(DoExpectancy());
-    }
+    while (timer < duration)
+    {
+        timer += Time.deltaTime;
 
-    while (timer < trialDuration)
+        // Track free-movement behaviors 
+        if (playerInMining)
+            timeSpentMining += Time.deltaTime;
+
+        if (playerInShelter)
+            timeInShelter += Time.deltaTime;
+
+        if (!playerInMining && !playerInShelter)
+            timeNotInZones += Time.deltaTime;
+
+        yield return null;
+    }
+    }
+  /**************************************************************************
+         * MODIFIED: 12/12/2025
+         * CHANGE: Added decision movement method
+         * REASON: Participants should have time to roam and mine freely before storm sound
+         **************************************************************************/
+    IEnumerator DoDecisionMovement(float duration) //Participants decide how they want to move following storm sound
+    {
+
+    float timer = 0f;
+    while (timer < duration)
     {
         timer += Time.deltaTime;
 
@@ -197,68 +310,6 @@ public class TrialManager : MonoBehaviour
 
         yield return null;
     }
-    // Stop recording when trial ends
-    movementRecorder.StopRecording();
-
-    // Now that the trial has truly ended, check for shock
-    if (stormActive)
-    {
-        // Wait one physics frame to ensure trigger updates have processed
-        yield return new WaitForFixedUpdate();
-
-        if (!playerInShelter) {
-    //sends message to UDPServer script for shock
-    UDPSender.sendString("S");	        
-yield return StartCoroutine(ApplyShocks());
-    shocked = true;
-    //Document when the shock happened
-    string shockPath = Path.Combine(desktopPath, "ShockFile.txt");
-    using (StreamWriter sw = new StreamWriter(shockPath, true))
-    {
-        sw.WriteLine("{0}, {1}", Time.time, DateTime.Now);
-    }
-    }
-        else {
-            shocked = false;
-            //sends message to UDPServer script for safe (neutral)
-            UDPSender.sendString("N");	
-        }
-    }
-
-    //Stop particle effect (storm clouds) when trial ends
-    if(stormActive && stormClouds !=null) {
-        stormClouds.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-         // Restore brightness after storm ends
-            if (directionalLight != null)
-                StartCoroutine(FadeLightIntensity(directionalLight, 1.0f, 1.4f, 2f));
-    }
-
-    // Final behavior code 
-    // 0 = other, 1 = house, 2 = mining
-    int finalBehavior = 0;
-    if (playerInShelter) {
-        finalBehavior = 1;
-    }
-    else if (playerInMining) {
-        finalBehavior = 2;
-    }
-
-    // --- Log trial ---
-    dataLogger.LogTrial(
-        trialNum + 1,                // trial #
-        stormActive,                 // storm present (Y/N)
-        shocked,                      //Whether they got shocked
-        expectancyValue,             // expectancy (0–9)
-        initialBehavior,             //Where they were when trial started
-        finalBehavior,               // Where they were when trial ended
-        oreMiner.pointsThisTrial,     // points earned
-        timeSpentMining,             // Tracked above in the trial loop
-        timeInShelter,                //Tracked in the trial loop
-        timeNotInZones              //Time not in shelter or mine. Tracked in trial loop
-    );
-
-    // Save immediately so progress is never lost
-    dataLogger.SaveLog();
     }
 
     IEnumerator ApplyShocks()

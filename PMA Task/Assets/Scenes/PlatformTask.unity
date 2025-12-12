@@ -247,8 +247,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalTrials: 80
-  trialDuration: 30
-  stormCount: 40
+  freeMovementMin: 15
+  freeMovementMax: 20
+  stormDurationMin: 12
+  stormDurationMax: 15
   expectancyPanel: {fileID: 1455868953}
   playerController: {fileID: 1673406964}
   warningSound: {fileID: 17980179}
@@ -1617,8 +1619,8 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006274799}
   serializedVersion: 8
-  lengthInSec: 60
-  simulationSpeed: 1
+  lengthInSec: 20
+  simulationSpeed: 1.5
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -1692,7 +1694,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 60
+      scalar: 80
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1745,7 +1747,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 6
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1863,7 +1865,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1200
+      scalar: 1500
       minScalar: 1
       maxCurve:
         serializedVersion: 2
