@@ -174,7 +174,7 @@ yield return StartCoroutine(ApplyShocks());
     string shockPath = Path.Combine(desktopPath, "ShockFile.txt");
     using (StreamWriter sw = new StreamWriter(shockPath, true))
     {
-        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2}", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
         else {
@@ -350,7 +350,7 @@ public void SetPlayerInShelter(bool inside)
         string shelterState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
-        sw.WriteLine("{0}, {1}, {2} Shelter, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, shelterState, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, {2} Shelter, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, shelterState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
 
@@ -364,7 +364,7 @@ public void SetPlayerInShelter(bool inside)
         string mineState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
-        sw.WriteLine("{0}, {1}, {2} Mine, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, mineState, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, {2} Mine, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, mineState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
   // Smoothly fade the directional light intensity during a storm trial
