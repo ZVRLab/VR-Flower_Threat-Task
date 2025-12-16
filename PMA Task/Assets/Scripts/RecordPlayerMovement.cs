@@ -15,7 +15,7 @@ public class RecordPlayerMovement : MonoBehaviour
     private int trialNumber = 0;
     private int stormFlag = 0; 
 
-    void Start()
+    void Awake()
     {
         // File path: PMAmovementLog_10_17_2025.txt (saves in persistentDataPath)
         string fileName = $"PMAmovementLog_{DateTime.Now:MM_dd_yyyy}.txt";
@@ -49,7 +49,7 @@ public class RecordPlayerMovement : MonoBehaviour
             Vector3 pos = player.position;
             float rotY = player.eulerAngles.y;
             // Only record X and Z (because player isn't move up or down)
-            string line = $"{trialNumber},{stormFlag}, {Time.time:F2},{pos.x:F3},{pos.z:F3},{rotY:F1}\n";
+            string line = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{rotY:F1}\n";
             File.AppendAllText(filePath, line);
 
             yield return new WaitForSeconds(recordInterval);
