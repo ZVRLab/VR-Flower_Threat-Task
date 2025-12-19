@@ -18,9 +18,9 @@ public class RecordPlayerMovement : MonoBehaviour
     void Awake()
     {
         // File path: PMAmovementLog_10_17_2025.txt (saves in persistentDataPath)
-        string fileName = $"PMAmovementLog_{DateTime.Now:MM_dd_yyyy}.txt";
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        filePath = Path.Combine(desktopPath, fileName);
+        string fileName = $"MovementLog.txt";
+        string folderPath = FolderManager.Instance.SessionFolderPath;
+        filePath = Path.Combine(folderPath, fileName);
 
         // Write header
         File.AppendAllText(filePath, "Trial,Storm,Time,PosX,PosZ,RotY\n");

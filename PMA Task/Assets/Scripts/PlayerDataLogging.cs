@@ -7,15 +7,16 @@ public class PlayerDataLogging : MonoBehaviour
 {
     private List<string> logLines = new List<string>();
     private string filePath;
+    private string folderPath;
 
 
     void Start()
     {
         // File name: pmaDataLog_MM_DD_YYYY.txt
-        string fileName = "Summary" + DateTime.Now.ToString("MM_dd_yyyy") + ".txt";
+        string fileName = "TrialsSummary.txt";
         // Save to desktop
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        filePath = Path.Combine(desktopPath, fileName);
+        folderPath = FolderManager.Instance.SessionFolderPath;
+        filePath = Path.Combine(folderPath, fileName);
         // Write header row
         logLines.Add("Trial\tStorm\tShock\tExpectancy\tinitialBehavior\tFinalBehavior\tPoints\tMiningTime\tShelterTime\tTimeNotInShelterMining");
     }

@@ -15,11 +15,14 @@ public class OreMiner : MonoBehaviour
     private bool canMine = false;         // Is player inside mining zone?
       //UDPSender comunicator
 	public UDPSender U;
-        //Path to desktop for .txt files
-    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
     public TrialManager trialManager;
-    
     public bool isExpectancyActive = false; //Can't accidentally mine when making expectancy selection
+    private string folderPath;
+
+    void Awake()
+    {
+        folderPath = FolderManager.Instance.SessionFolderPath;
+    }
 
     void Update()
     {
@@ -40,7 +43,7 @@ public class OreMiner : MonoBehaviour
         //UDP sender code G for storm cue
         UDPSender.sendString("M");
         //Document when the point was added
-         string pointPath = Path.Combine(desktopPath, "PointAddedFile.txt");
+         string pointPath = Path.Combine(folderPath, "PointAddedFile.txt");
          int trialNum = trialManager.CurrentTrial;
     using (StreamWriter sw = new StreamWriter(pointPath, true))
 {

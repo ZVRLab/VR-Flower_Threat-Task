@@ -29,13 +29,12 @@ public class TrialManager : MonoBehaviour
     public OreMiner oreMiner;
     public PlayerDataLogging dataLogger;
     public RecordPlayerMovement movementRecorder;
-    //UDPSender comunicator
-	public UDPSender U;
-    //Path to desktop for .txt files
-    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
     public int CurrentTrial => currentTrial;
     public Vector3 playerPosition;
-   
+    private string folderPath;
+    //UDPSender comunicator
+	public UDPSender U;
+
 
     [Header("Environment")]
     public Collider miningArea;
@@ -53,7 +52,11 @@ public class TrialManager : MonoBehaviour
 
     private bool playerInShelter = false;
     private bool playerInMining = false;
-
+    
+void Awake() 
+{
+    folderPath = FolderManager.Instance.SessionFolderPath;
+}
     void Start()
     { 
         //UDP sender code G for start cue
@@ -140,7 +143,7 @@ public class TrialManager : MonoBehaviour
         StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
 
         //Document when the storm sound happened
-    string stormPath = Path.Combine(desktopPath, "StormFile.txt");
+    string stormPath = Path.Combine(folderPath, "StormFile.txt");
     using (StreamWriter sw = new StreamWriter(stormPath, true))
     {
         sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2}", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
@@ -171,7 +174,7 @@ public class TrialManager : MonoBehaviour
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
     //Document when the shock happened
-    string shockPath = Path.Combine(desktopPath, "ShockFile.txt");
+    string shockPath = Path.Combine(folderPath, "ShockFile.txt");
     using (StreamWriter sw = new StreamWriter(shockPath, true))
     {
         sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
@@ -250,7 +253,7 @@ yield return StartCoroutine(ApplyShocks());
 
     // Store the value for logging
     expectancyValue = expectancyUI.expectancyValue;
-    string expectancyPath = Path.Combine(desktopPath, "ExpectancyRatingFile.txt");
+    string expectancyPath = Path.Combine(folderPath, "ExpectancyRatingFile.txt");
     using (StreamWriter sw = new StreamWriter(expectancyPath, true))
 {
     sw.WriteLine("{0}, {1}, Expectancy {2}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
@@ -346,7 +349,7 @@ public void SetPlayerInShelter(bool inside)
         Debug.Log("Shelter status: " + inside);
 
         //Record when player enters or exits the shelter
-        string enterexitPath = Path.Combine(desktopPath, "EnterExit.txt"); 
+        string enterexitPath = Path.Combine(folderPath, "EnterExit.txt"); 
         string shelterState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
@@ -360,7 +363,7 @@ public void SetPlayerInShelter(bool inside)
         Debug.Log("Mining status: " + inside);
 
       //Record when player enters or exits the mine
-      string enterexitPath = Path.Combine(desktopPath, "EnterExit.txt"); 
+      string enterexitPath = Path.Combine(folderPath, "EnterExit.txt"); 
         string mineState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
