@@ -139,8 +139,6 @@ void Awake()
         //UDP sender code G for storm cue
         UDPSender.sendString("G");
         warningSound.Play();
-        stormClouds.Play();
-        StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
 
         //Document when the storm sound happened
     string stormPath = Path.Combine(folderPath, "StormFile.txt");
@@ -158,8 +156,11 @@ void Awake()
      MODIFIED: 12/12/2025 by SD
      **************************************************************************/
     //PHASE 4 - DECISION MOVEMENT ******************************************************
+   stormClouds.Play();
+    StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
    yield return StartCoroutine(DoDecisionMovement(stormDuration));
    Debug.Log("Decision movement duration = " + stormDuration);
+
 
     //PHASE 5 - SHOCK EVALUATION ******************************************************
     // Now that the trial has truly ended, check for shock
