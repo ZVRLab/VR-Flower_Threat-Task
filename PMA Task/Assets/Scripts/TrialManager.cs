@@ -55,10 +55,12 @@ public class TrialManager : MonoBehaviour
     
 void Awake() 
 {
-    folderPath = FolderManager.Instance.SessionFolderPath;
+    
 }
     void Start()
     { 
+        folderPath = FolderManager.Instance.SessionFolderPath;
+        
         //UDP sender code G for start cue
         UDPSender.sendString("G");
         
