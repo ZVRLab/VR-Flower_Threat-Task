@@ -255,6 +255,7 @@ MonoBehaviour:
   playerController: {fileID: 1673406964}
   warningSound: {fileID: 17980179}
   stormClouds: {fileID: 1006274801}
+  rainStorm: {fileID: 1402113089}
   oreMiner: {fileID: 1908789159}
   dataLogger: {fileID: 1783216904}
   movementRecorder: {fileID: 212339098}

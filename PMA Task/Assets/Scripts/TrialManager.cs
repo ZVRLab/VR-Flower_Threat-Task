@@ -26,6 +26,7 @@ public class TrialManager : MonoBehaviour
     public FirstPersonController playerController; // disable/enable movement script
     public AudioSource warningSound;
     public ParticleSystem stormClouds;
+    public ParticleSystem rainStorm;
     public OreMiner oreMiner;
     public PlayerDataLogging dataLogger;
     public RecordPlayerMovement movementRecorder;
@@ -159,6 +160,7 @@ void Awake()
      **************************************************************************/
     //PHASE 4 - DECISION MOVEMENT ******************************************************
    stormClouds.Play();
+   rainStorm.Play();
     StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
    yield return StartCoroutine(DoDecisionMovement(stormDuration));
    Debug.Log("Decision movement duration = " + stormDuration);
@@ -197,6 +199,7 @@ yield return StartCoroutine(ApplyShocks());
     //Stop particle effect (storm clouds) when trial ends
     if(stormActive && stormClouds !=null) {
         stormClouds.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        rainStorm.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
          // Restore brightness after storm ends
             if (directionalLight != null)
                 StartCoroutine(FadeLightIntensity(directionalLight, 1.0f, 1.4f, 2f));
