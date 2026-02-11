@@ -114,18 +114,7 @@ void Awake()
 
         movementRecorder.StartRecording(trialNum + 1, stormActive);   
 
-    // Initial Behavior Code (where they were when the trial started)
-    // 0 = other, 1 = house, 2 = mining
-    int initialBehavior = 0;
-        if (playerInShelter)
-        {
-            initialBehavior = 1;
-        }
-        else if (playerInMining)
-        {
-            initialBehavior = 2;
-        }
-    
+
     /**************************************************************************
      * CHANGE: Free movement added to start of each trial before storm sound and expectancy
      MODIFIED: 12/12/2025
@@ -150,6 +139,18 @@ void Awake()
         sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
+       // Initial Behavior Code (where they were when the trial started)
+    // 0 = other, 1 = house, 2 = mining
+    int initialBehavior = 0;
+        if (playerInShelter)
+        {
+            initialBehavior = 1;
+        }
+        else if (playerInMining)
+        {
+            initialBehavior = 2;
+        }
+    
 
     // PHASE 3 - EXPECTANCY RATING ******************************************************
     yield return StartCoroutine(DoExpectancy());

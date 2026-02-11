@@ -18,7 +18,7 @@ public class PlayerDataLogging : MonoBehaviour
         folderPath = FolderManager.Instance.SessionFolderPath;
         filePath = Path.Combine(folderPath, fileName);
         // Write header row
-        logLines.Add("Trial\tStorm\tShock\tExpectancy\tinitialBehavior\tFinalBehavior\tPoints\tMiningTime\tShelterTime\tTimeNotInShelterMining");
+        logLines.Add("Trial\tStorm\tShock\tExpectancy\tPreStormLocation\tStormEndLocation\tPoints\tMiningTime\tShelterTime\tTimeNotInShelterMining");
     }
 
     //Add row of trial data
