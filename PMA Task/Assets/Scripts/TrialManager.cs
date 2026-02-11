@@ -147,7 +147,7 @@ void Awake()
     string stormPath = Path.Combine(folderPath, "StormFile.txt");
     using (StreamWriter sw = new StreamWriter(stormPath, true))
     {
-        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2}", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
 
@@ -250,6 +250,12 @@ yield return StartCoroutine(ApplyShocks());
     expectancyUI.enabled = false;   // temporarily disable script so it can't process input
     yield return new WaitForSeconds(1f);
     expectancyUI.enabled = true;    // re-enable after lockout
+string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.txt");
+    using (StreamWriter sw = new StreamWriter(expectancyAppearsPath, true))
+{
+    sw.WriteLine("{0}, {1}, Expectancy APPEARS, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
+}
+    
 
     // Wait until expectancy is confirmed
         while (!expectancyUI.expectancySelected)
@@ -262,7 +268,7 @@ yield return StartCoroutine(ApplyShocks());
     string expectancyPath = Path.Combine(folderPath, "ExpectancyRatingFile.txt");
     using (StreamWriter sw = new StreamWriter(expectancyPath, true))
 {
-    sw.WriteLine("{0}, {1}, Expectancy {2}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
+    sw.WriteLine("{0}, {1}, Expectancy RATED {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
 }
 
     // Hide the panel and re-enable movement and mining
