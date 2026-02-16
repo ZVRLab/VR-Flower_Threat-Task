@@ -22,8 +22,8 @@ public class RecordPlayerMovement : MonoBehaviour
         string folderPath = FolderManager.Instance.SessionFolderPath;
         filePath = Path.Combine(folderPath, fileName);
 
-        // Write header
-        File.AppendAllText(filePath, "Trial,Storm,Time,PosX,PosZ,RotY\n");
+        // Write header 
+        File.AppendAllText(filePath, "Trial,Storm,Time,PosX,PosZ,RotY,ForwardX,ForwardZ\n");
     }
 
     public void StartRecording(int trial, bool isStorm)
@@ -48,8 +48,12 @@ public class RecordPlayerMovement : MonoBehaviour
         {
             Vector3 pos = player.position;
             float rotY = player.eulerAngles.y;
-            // Only record X and Z (because player isn't move up or down)
-            string line = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{rotY:F1}\n";
+            
+            // Get the forward direction (normalized vector)
+            Vector3 forward = player.forward;
+            
+            // Record X and Z position, rotation Y (yaw rotation; rotating left or right), and forward direction X and Z (where player is facing)
+            string line = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{rotY:F1},{forward.x:F3},{forward.z:F3}\n";
             File.AppendAllText(filePath, line);
 
             yield return new WaitForSeconds(recordInterval);
