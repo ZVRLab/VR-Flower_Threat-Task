@@ -20,7 +20,7 @@ public class ExpectancyUI : MonoBehaviour
 
         // Configure slider
         expectancySlider.minValue = 0;
-        expectancySlider.maxValue = 9;
+        expectancySlider.maxValue = 10;
         expectancySlider.wholeNumbers = true;
         expectancySlider.value = 5;
         expectancySlider.interactable = false; // Disable mouse interaction
@@ -39,7 +39,6 @@ public class ExpectancyUI : MonoBehaviour
                 {
                     expectancyValue = Mathf.Max(0, expectancyValue - 1);
                     expectancySlider.value = expectancyValue;
-                    UpdateExpectancyText();
                     keyHoldTimer = 0f;
                 }
             }
@@ -48,9 +47,8 @@ public class ExpectancyUI : MonoBehaviour
                 keyHoldTimer += Time.deltaTime;
                 if (keyHoldTimer >= keyHoldDelay)
                 {
-                    expectancyValue = Mathf.Min(9, expectancyValue + 1);
+                    expectancyValue = Mathf.Min(10, expectancyValue + 1);
                     expectancySlider.value = expectancyValue;
-                    UpdateExpectancyText();
                     keyHoldTimer = 0f;
                 }
             }
@@ -69,7 +67,7 @@ public class ExpectancyUI : MonoBehaviour
 
     void UpdateExpectancyText()
     {
-        expectancyText.text = "WARNING: Lightning storm approaches. \nHow likely are you to mine or run to shelter? ";
+        expectancyText.text = "WARNING: Lightning storm approaches. \nHow likely are you to go to shelter or mine?";
     }
 
     public void ResetExpectancy()
