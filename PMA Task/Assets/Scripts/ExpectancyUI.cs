@@ -1,16 +1,30 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ExpectancyUI : MonoBehaviour
 {
     public TextMeshProUGUI expectancyText;
+    public Slider expectancySlider;
 
     [HideInInspector] public int expectancyValue = 5;   // start at 5
     [HideInInspector] public bool expectancySelected = false;
 
+    //Controlling the speed of moving the slider
+    private float keyHoldTimer = 0f;
+    public float keyHoldDelay = 0.15f; // Adjust this value to control speed
+
     void Start()
     {
         expectancySelected = false;
+
+        // Configure slider
+        expectancySlider.minValue = 0;
+        expectancySlider.maxValue = 9;
+        expectancySlider.wholeNumbers = true;
+        expectancySlider.value = 5;
+        expectancySlider.interactable = false; // Disable mouse interaction
+
         UpdateExpectancyText();
     }
 
@@ -18,16 +32,31 @@ public class ExpectancyUI : MonoBehaviour
     {
         if (!expectancySelected)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKey(KeyCode.Alpha1))
             {
-                expectancyValue = Mathf.Max(0, expectancyValue - 1);
-                UpdateExpectancyText();
+                keyHoldTimer += Time.deltaTime;
+                if (keyHoldTimer >= keyHoldDelay)
+                {
+                    expectancyValue = Mathf.Max(0, expectancyValue - 1);
+                    expectancySlider.value = expectancyValue;
+                    UpdateExpectancyText();
+                    keyHoldTimer = 0f;
+                }
             }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3))
+            else if (Input.GetKey(KeyCode.Alpha3))
             {
-                expectancyValue = Mathf.Min(9, expectancyValue + 1);
-                UpdateExpectancyText();
+                keyHoldTimer += Time.deltaTime;
+                if (keyHoldTimer >= keyHoldDelay)
+                {
+                    expectancyValue = Mathf.Min(9, expectancyValue + 1);
+                    expectancySlider.value = expectancyValue;
+                    UpdateExpectancyText();
+                    keyHoldTimer = 0f;
+                }
+            }
+            else
+            {
+                keyHoldTimer = 0f;
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha4))
@@ -40,13 +69,14 @@ public class ExpectancyUI : MonoBehaviour
 
     void UpdateExpectancyText()
     {
-        expectancyText.text = "How likely are you to mine?: " + expectancyValue.ToString();
+        expectancyText.text = "WARNING: Lightning storm approaches. \nHow likely are you to mine or run to shelter? ";
     }
 
     public void ResetExpectancy()
     {
         expectancyValue = 5; // reset to middle each trial
         expectancySelected = false;
+        expectancySlider.value = 5;
         UpdateExpectancyText();
     }
 }
