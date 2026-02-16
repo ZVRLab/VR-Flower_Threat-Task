@@ -27,7 +27,7 @@ public class OreMiner : MonoBehaviour
     void Update()
     {
         // Mining action: press 4 to mine
-        if (canMine && Input.GetKeyDown(KeyCode.Alpha4) && !isExpectancyActive)
+        if (canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive)
         {
             if (Time.time - lastMineTime >= mineCooldown)
             {
