@@ -180,16 +180,24 @@ void Awake()
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
     //Document when the shock happened
+    string shockLocation = playerInMining ? "MINE" : "OUTSIDE";
     string shockPath = Path.Combine(folderPath, "ShockFile.txt");
     using (StreamWriter sw = new StreamWriter(shockPath, true))
     {
-        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, SHOCK RECEIVED, Location: {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, shockLocation, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
         else {
             shocked = false;
             //sends message to UDPServer script for safe (neutral)
             UDPSender.sendString("N");	
+            //Document when the shock happened
+            string safeLocation = playerInShelter ? "SHELTER" : "OUTSIDE";
+    string noshockPath = Path.Combine(folderPath, "ShockFile.txt");
+    using (StreamWriter sw = new StreamWriter(noshockPath, true))
+    {
+        sw.WriteLine("{0}, {1}, NO SHOCK, Location: {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, safeLocation, playerPosition.x, playerPosition.y, playerPosition.z);
+    }
         }
     }
 
