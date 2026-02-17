@@ -67,7 +67,7 @@ public class ExpectancyUI : MonoBehaviour
 
     void UpdateExpectancyText()
     {
-        expectancyText.text = "Warning: Lightning storm approaches. \nHow likely are you to risk mining rather than take shelter during the storm? ";
+        expectancyText.text = "Warning: Lightning storm approaches. \nOn a scale from only seeking shelter to only mining, where do you stand?";
     }
 
     public void ResetExpectancy()
