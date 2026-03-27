@@ -52,6 +52,7 @@ public class TrialManager : MonoBehaviour
     private float timeNotInZones = 0f;
 
     private bool playerInShelter = false;
+    public bool PlayerInShelter => playerInShelter; // * Added: public read-only access for other scripts CEAV
     private bool playerInMining = false;
     
 void Awake() 
