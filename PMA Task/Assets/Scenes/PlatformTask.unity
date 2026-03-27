@@ -468,6 +468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecordPlayerMovement
   player: {fileID: 1673406960}
+  shelterCollider: {fileID: 226328553}
+  miningCollider: {fileID: 1908789160}
   recordInterval: 0.5
 --- !u!4 &212339099
 Transform:
