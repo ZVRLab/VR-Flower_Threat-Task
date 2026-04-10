@@ -110,6 +110,7 @@ void Awake()
         bool shocked = false;
         timeSpentMining = 0f;
         timeInShelter = 0f;
+        timeNotInZones = 0f;
        float stormDuration = UnityEngine.Random.Range(stormDurationMin, stormDurationMax);
     float freeMovementDuration = UnityEngine.Random.Range(freeMovementMin, freeMovementMax);
 
