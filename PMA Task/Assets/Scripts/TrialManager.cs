@@ -206,6 +206,9 @@ yield return StartCoroutine(ApplyShocks());
     // Stop recording movement when trial ends
     movementRecorder.StopRecording();
 
+    float timeFacingHouse = movementRecorder.TimeFacingHouse;
+    float timeFacingMine = movementRecorder.TimeFacingMine;
+
     //Stop particle effect (storm clouds) when trial ends
     if(stormActive && stormClouds !=null) {
         stormClouds.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -236,7 +239,9 @@ yield return StartCoroutine(ApplyShocks());
         oreMiner.pointsThisTrial,     // points earned
         timeSpentMining,             // Tracked above in the trial loop
         timeInShelter,                //Tracked in the trial loop
-        timeNotInZones              //Time not in shelter or mine. Tracked in trial loop
+        timeNotInZones,              //Time not in shelter or mine. Tracked in trial loop
+        timeFacingHouse,             //Time spent facing the house
+        timeFacingMine               //Time spent facing the mine
     );
 
     // Save immediately so progress is never lost
@@ -250,6 +255,9 @@ yield return StartCoroutine(ApplyShocks());
 
         //Disable mining
         oreMiner.isExpectancyActive = true;
+
+        //Disable recording of the time facing mine or house
+        movementRecorder.countFacingTime = false;
 
     // Reset UI state
     expectancyPanel.SetActive(true);
@@ -281,10 +289,11 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
     sw.WriteLine("{0}, {1}, Expectancy RATED {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
 }
 
-    // Hide the panel and re-enable movement and mining
+    // Hide the panel and re-enable movement and mining and counting the time spent facing house or mine
     expectancyPanel.SetActive(false);
         playerController.enabled = true;
         oreMiner.isExpectancyActive = false;
+        movementRecorder.countFacingTime = true;
 }
 
     /**************************************************************************

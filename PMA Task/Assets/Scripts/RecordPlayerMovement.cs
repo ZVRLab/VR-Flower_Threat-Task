@@ -23,6 +23,13 @@ public class RecordPlayerMovement : MonoBehaviour
     private int trialNumber = 0;
     private int stormFlag = 0; 
 
+    private int facingShelterCount = 0;
+    private int facingOreCount = 0;
+
+    public bool countFacingTime = true; //This will be used to tell when to record facing time, as we don't want to record this as they are filling out the expectancy
+    public float TimeFacingHouse => facingShelterCount * recordInterval;
+    public float TimeFacingMine => facingOreCount * recordInterval;
+
     void Awake()
     {
         // File path: PMAmovementLog_10_17_2025.txt (saves in persistentDataPath)
@@ -43,6 +50,11 @@ public class RecordPlayerMovement : MonoBehaviour
     {
         trialNumber = trial;
         stormFlag = isStorm ? 1 : 0; // convert bool to 1/0
+
+         // Reset counts for new trial
+    facingShelterCount = 0;
+    facingOreCount = 0;
+
         if (!isRecording)
         {
             isRecording = true;
@@ -83,6 +95,9 @@ public class RecordPlayerMovement : MonoBehaviour
                 dirToOre.Normalize(); //normalized the direction to ore vector to ensure the dot product is accurate CEAV
                 float oreDot = Vector3.Dot(forwardFlat, dirToOre);
                 int facingOre = oreDot > viewThreshold ? 1 : 0; // 1 if facing ore, 0 if not (based on view threshold) CEAV
+                if (countFacingTime && facingOre == 1) {
+                facingOreCount++;
+                }
 
                 string facingLine;
                 if (inShelter == 1)
@@ -99,6 +114,9 @@ public class RecordPlayerMovement : MonoBehaviour
                     dirToShelter.Normalize(); //normalized the direction to shelter vector to ensure the dot product is accurate CEAV
                     float shelterDot = Vector3.Dot(forwardFlat, dirToShelter);
                     int facingShelter = shelterDot > viewThreshold ? 1 : 0; // 1 if facing shelter, 0 if not (based on view threshold) CEAV
+                    if (countFacingTime && facingShelter == 1) {
+                    facingShelterCount++;
+                    }
 
                     facingLine = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{inShelter},{shelterDot:F3},{facingShelter},{oreDot:F3},{facingOre}\n";
                 }
