@@ -55,11 +55,11 @@ public class RecordPlayerMovement : MonoBehaviour
     facingShelterCount = 0;
     facingOreCount = 0;
 
-        if (!isRecording)
-        {
-            isRecording = true;
-            StartCoroutine(RecordMovement());
-        }
+    // Ensure previous coroutine is stopped
+    StopAllCoroutines();
+
+    isRecording = true;
+    StartCoroutine(RecordMovement());
     }
 
     public void StopRecording()
