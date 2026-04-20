@@ -54,6 +54,12 @@ public class TrialManager : MonoBehaviour
     private bool playerInShelter = false;
     public bool PlayerInShelter => playerInShelter; // * Added: public read-only access for other scripts CEAV
     private bool playerInMining = false;
+
+    //Tracking time to safe house
+    private float timeToSafeHouse = -88f; // default = did not reach
+    private bool startedOutsideShelter = false;
+    private bool enteredShelterDuringDecision = false;
+    private float decisionStartTime = 0f;
     
 void Awake() 
 {
@@ -165,9 +171,27 @@ void Awake()
    stormClouds.Play();
    rainStorm.Play();
     StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
+
+    // --- Initialize TimeToSafeHouse tracking ---
+startedOutsideShelter = !playerInShelter;
+enteredShelterDuringDecision = false;
+timeToSafeHouse = -88f; // default: did not reach
+decisionStartTime = Time.time;
+
    yield return StartCoroutine(DoDecisionMovement(stormDuration));
    Debug.Log("Decision movement duration = " + stormDuration);
 
+// --- Finalize TimeToSafeHouse outcome --- if they never reached shelter → remains -88 (default)
+if (!startedOutsideShelter)
+{
+    // Already in shelter at start
+    timeToSafeHouse = -77f;
+}
+else if (!enteredShelterDuringDecision && playerInMining)
+{
+    // Stayed mining entire time
+    timeToSafeHouse = -99f;
+}
 
     //PHASE 5 - SHOCK EVALUATION ******************************************************
     // Now that the trial has truly ended, check for shock
@@ -242,7 +266,8 @@ yield return StartCoroutine(ApplyShocks());
         timeInShelter,                //Tracked in the trial loop
         timeNotInZones,              //Time not in shelter or mine. Tracked in trial loop
         timeFacingHouse,             //Time spent facing the house
-        timeFacingMine               //Time spent facing the mine
+        timeFacingMine,               //Time spent facing the mine
+        timeToSafeHouse             //Time taken to get to the house when outside
     );
 
     // Save immediately so progress is never lost
@@ -381,6 +406,19 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
 //Detect whether player is in shelter or mining area. This uses ZoneDetector.cs
 public void SetPlayerInShelter(bool inside)
     {
+        // Detect ENTER event
+    if (inside && !playerInShelter)
+    {
+        // Only count if during decision phase AND started outside
+        if (startedOutsideShelter && !enteredShelterDuringDecision)
+        {
+            enteredShelterDuringDecision = true;
+            timeToSafeHouse = Time.time - decisionStartTime;
+
+            Debug.Log("TimeToSafeHouse recorded: " + timeToSafeHouse);
+        }
+    }
+        
         playerInShelter = inside;
         Debug.Log("Shelter status: " + inside);
 
