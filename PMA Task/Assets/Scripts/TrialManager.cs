@@ -257,7 +257,7 @@ yield return StartCoroutine(ApplyShocks());
         //Disable mining
         oreMiner.isExpectancyActive = true;
 
-        //Disable recording of the time facing mine or house
+        //Make sure it's not recording the time spent facing house or mine during expectancy
         movementRecorder.countFacingTime = false;
 
     // Reset UI state
@@ -305,6 +305,7 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
 
     IEnumerator DoFreeMovement(float duration) //Have participants roam and mine freely before storm sound
     {
+        movementRecorder.countFacingTime = true;
         float timer = 0f;
         
     while (timer < duration)
@@ -323,6 +324,7 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
 
         yield return null;
     }
+     movementRecorder.countFacingTime = false;
     }
   /**************************************************************************
          * MODIFIED: 12/12/2025
@@ -331,6 +333,7 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
          **************************************************************************/
     IEnumerator DoDecisionMovement(float duration) //Participants decide how they want to move following storm sound
     {
+    movementRecorder.countFacingTime = true; 
 
     float timer = 0f;
     while (timer < duration)
@@ -356,6 +359,7 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
 
         yield return null;
     }
+    movementRecorder.countFacingTime = false;
     }
 
     IEnumerator ApplyShocks()

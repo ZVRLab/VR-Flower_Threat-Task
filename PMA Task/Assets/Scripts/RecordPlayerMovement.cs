@@ -26,7 +26,7 @@ public class RecordPlayerMovement : MonoBehaviour
     private int facingShelterCount = 0;
     private int facingOreCount = 0;
 
-    public bool countFacingTime = true; //This will be used to tell when to record facing time, as we don't want to record this as they are filling out the expectancy
+    public bool countFacingTime = false; //This will be used to tell when to record facing time
     public float TimeFacingHouse => facingShelterCount * recordInterval;
     public float TimeFacingMine => facingOreCount * recordInterval;
 
