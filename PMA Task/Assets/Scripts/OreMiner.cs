@@ -4,6 +4,9 @@ using System.IO;
 
 public class OreMiner : MonoBehaviour
 {
+    [Header("Mode")]
+    public bool enableDataLogging = true; // turn OFF in practice in inspector
+    
     [Header("Mining Settings")]
     public float mineCooldown = 1f;       // 1 second between mines
     private float lastMineTime = -1f;     
@@ -21,7 +24,10 @@ public class OreMiner : MonoBehaviour
 
     void Awake()
     {
+         if (enableDataLogging && FolderManager.Instance != null)
+        {
         folderPath = FolderManager.Instance.SessionFolderPath;
+        }
     }
 
     void Update()
@@ -42,14 +48,18 @@ public class OreMiner : MonoBehaviour
         lastMineTime = Time.time;
         //UDP sender code G for storm cue
         UDPSender.sendString("M");
-        //Document when the point was added
-         string pointPath = Path.Combine(folderPath, "PointAddedFile.txt");
-         int trialNum = trialManager.CurrentTrial;
-    using (StreamWriter sw = new StreamWriter(pointPath, true))
-{
-    sw.WriteLine("{0}, {1}, Points {2}, Trial {3}", Time.time, DateTime.Now, pointsThisTrial, trialNum + 1); //(Added a point to trial because it started at 0)
-}
 
+        //Data logging for task (ONLY if enabled)
+        if (enableDataLogging) {
+            //Document when the point was added
+                    string pointPath = Path.Combine(folderPath, "PointAddedFile.txt");
+                    int trialNum = trialManager.CurrentTrial;
+                using (StreamWriter sw = new StreamWriter(pointPath, true))
+            {
+                sw.WriteLine("{0}, {1}, Points {2}, Trial {3}", Time.time, DateTime.Now, pointsThisTrial, trialNum + 1); //(Added a point to trial because it started at 0)
+            }
+        }
+        
         // Update the UI
         if (scoreUI != null)
             scoreUI.UpdateScore(pointsThisTrial);
