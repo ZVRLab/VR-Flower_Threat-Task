@@ -8,6 +8,7 @@ public class PracticeSessionController : MonoBehaviour
     public OreMiner oreMiner;
     public GameObject expectancyPanel;
     public FirstPersonController playerController;
+    public UDPSender U;
 
     [Header("Timing")]
     public float expectancyDelay = 5f;
@@ -19,11 +20,34 @@ public class PracticeSessionController : MonoBehaviour
     void Update()
     {
         HandleMiningTimer();
+
+         if (Input.GetKeyDown(KeyCode.F1))
+        {
+            UDPSender.sendString("S");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            UDPSender.sendString("M");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            UDPSender.sendString("N");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            UDPSender.sendString("G");
+        }
+
+    //Escape scene to go back to options page
+
+    //End the scene and go to thank you screen
     }
 
     private void HandleMiningTimer()
     {
-        Debug.Log("IsMining: " + oreMiner.IsMining + " | Timer: " + miningTimer);
         // Don’t accumulate time during expectancy UI
         if (isExpectancyRunning) return;
 
