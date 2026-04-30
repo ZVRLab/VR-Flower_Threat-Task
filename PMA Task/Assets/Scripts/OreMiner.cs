@@ -21,6 +21,7 @@ public class OreMiner : MonoBehaviour
     public TrialManager trialManager;
     public bool isExpectancyActive = false; //Can't accidentally mine when making expectancy selection
     private string folderPath;
+    public bool IsMining;
 
     void Awake()
     {
@@ -32,20 +33,20 @@ public class OreMiner : MonoBehaviour
 
     void Update()
     {
-        bool isMiningInput = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive;
+        IsMining = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive;
 
         // PRACTICE MODE (no points, just "Mining...")
         if (!enableDataLogging)
         {
                if (scoreUI != null)
     {
-        scoreUI.ShowMining(isMiningInput);
+        scoreUI.ShowMining(IsMining);
     }
     return;
         }
 
         // REAL TASK MODE (normal behavior)
-        if (isMiningInput && enableDataLogging)
+        if (IsMining && enableDataLogging)
         {
             if (Time.time - lastMineTime >= mineCooldown)
             {
