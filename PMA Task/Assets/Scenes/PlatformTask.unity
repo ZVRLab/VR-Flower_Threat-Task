@@ -471,6 +471,7 @@ MonoBehaviour:
   shelterCollider: {fileID: 226328553}
   miningCollider: {fileID: 1908789160}
   recordInterval: 0.5
+  countFacingTime: 0
 --- !u!4 &212339099
 Transform:
   m_ObjectHideFlags: 0
@@ -1087,6 +1088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 708740722}
+  isPracticeMode: 0
 --- !u!1 &466169726
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,7 +1611,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Points:'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1636,8 +1638,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 90
+  m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1674,7 +1676,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -680.6538, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -17767,6 +17769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9faf7109864f44c6a4f1bdafe0aec9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableDataLogging: 1
   mineCooldown: 1
   pointsThisTrial: 0
   scoreUI: {fileID: 456497161}

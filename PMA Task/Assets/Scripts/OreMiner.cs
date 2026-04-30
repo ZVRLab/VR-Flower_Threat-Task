@@ -32,12 +32,24 @@ public class OreMiner : MonoBehaviour
 
     void Update()
     {
-        // Mining action: press 4 to mine
-        if (canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive)
+        bool isMiningInput = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive;
+
+        // PRACTICE MODE (no points, just "Mining...")
+        if (!enableDataLogging)
+        {
+               if (scoreUI != null)
+    {
+        scoreUI.ShowMining(isMiningInput);
+    }
+    return;
+        }
+
+        // REAL TASK MODE (normal behavior)
+        if (isMiningInput && enableDataLogging)
         {
             if (Time.time - lastMineTime >= mineCooldown)
             {
-                MineOre(); //Calls upon MineOre to get points and update the points UI
+                MineOre();
             }
         }
     }
@@ -71,6 +83,7 @@ public class OreMiner : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
+        Debug.Log("Player entered mining zone");
             canMine = true; //Player is in mining area 
     }
 
@@ -88,7 +101,12 @@ public class OreMiner : MonoBehaviour
         pointsThisTrial = 0;
         lastMineTime = -1f;
 
-        if (scoreUI != null)
+        if (scoreUI != null) {
+            if (enableDataLogging)
             scoreUI.UpdateScore(pointsThisTrial);
+             else
+            scoreUI.ShowMining(false);
+        }
+           
     }
 }
