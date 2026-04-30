@@ -9,6 +9,7 @@ public class ExpectancyUI : MonoBehaviour
 
     [HideInInspector] public int expectancyValue = 5;   // start at 5
     [HideInInspector] public bool expectancySelected = false;
+     public bool isPracticeMode = false;
 
     //Controlling the speed of moving the slider
     private float keyHoldTimer = 0f;
@@ -67,6 +68,10 @@ public class ExpectancyUI : MonoBehaviour
 
     void UpdateExpectancyText()
     {
+        
+        if (isPracticeMode)
+        expectancyText.text = "On a scale from confusing to clear, how was this practice session?";
+        else 
         expectancyText.text = "Warning: Lightning storm approaches. \nOn a scale from only seeking shelter to only mining, where do you stand?";
     }
 
