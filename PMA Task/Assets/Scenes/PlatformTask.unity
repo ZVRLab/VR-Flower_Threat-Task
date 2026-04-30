@@ -1638,8 +1638,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
-  m_fontSizeBase: 90
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12343,6 +12343,7 @@ MonoBehaviour:
   expectancySlider: {fileID: 1368791002}
   expectancyValue: 5
   expectancySelected: 0
+  isPracticeMode: 0
   keyHoldDelay: 0.15
 --- !u!1 &1511466223
 GameObject:
@@ -17776,6 +17777,7 @@ MonoBehaviour:
   U: {fileID: 0}
   trialManager: {fileID: 17980180}
   isExpectancyActive: 0
+  IsMining: 0
 --- !u!65 &1908789160
 BoxCollider:
   m_ObjectHideFlags: 0
