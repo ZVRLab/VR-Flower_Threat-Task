@@ -6,12 +6,17 @@ public class SceneLoader : MonoBehaviour
     
     [Header("Optional Escape Behavior")]
     public string escapeScene; // set per scene in Inspector
+    public bool quitOnEscape = false; //This is set as true for the Main Menu scene, as this will quit the game entirely. 
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!string.IsNullOrEmpty(escapeScene))
+            if (quitOnEscape) //If on Main Menu (because this is marked true in the inspector)
+            {
+                QuitGame();
+            }
+            else if (!string.IsNullOrEmpty(escapeScene)) //Otherwise, it will take you to the scene set in the inspector. 
             {
                 LoadScene(escapeScene);
             }
@@ -24,5 +29,12 @@ public class SceneLoader : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+        public void QuitGame() //Also assigned to the Quit Button in the inspector for the Main Menu scene OnClick()
+    {
+        Debug.Log("Quitting game...");
+
+        Application.Quit();
     }
 }
