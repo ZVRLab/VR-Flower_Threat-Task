@@ -1,6 +1,7 @@
 using UnityEngine; 
 using System.Collections;
 using StarterAssets;
+using UnityEngine.SceneManagement;
 
 public class PracticeSessionController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PracticeSessionController : MonoBehaviour
     public GameObject expectancyPanel;
     public FirstPersonController playerController;
     public UDPSender U;
+    public string thankYouSceneName = "ThankYou";
 
     [Header("Timing")]
     public float expectancyDelay = 5f;
@@ -16,6 +18,10 @@ public class PracticeSessionController : MonoBehaviour
     private float miningTimer = 0f;
     private bool expectancyTriggered = false;
     private bool isExpectancyRunning = false;
+
+    [Header("Practice Progress")]
+    public int expectancyCount = 0;
+    public int maxExpectancyTrials = 3;
 
     void Update()
     {
@@ -97,6 +103,7 @@ public class PracticeSessionController : MonoBehaviour
         {
             yield return null;
         }
+        expectancyCount++;
 
         // Hide UI
         expectancyPanel.SetActive(false);
@@ -112,5 +119,12 @@ public class PracticeSessionController : MonoBehaviour
         miningTimer = 0f;
         expectancyTriggered = false;
         isExpectancyRunning = false;
+
+        // Decide whether to continue or end practice
+        if (expectancyCount >= maxExpectancyTrials)
+        {
+            yield return new WaitForSeconds(0.5f);
+            SceneManager.LoadScene(thankYouSceneName);
+        }
     }
 }
