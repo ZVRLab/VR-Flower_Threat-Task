@@ -112,6 +112,7 @@ public class PracticeSessionController : MonoBehaviour
         if (playerController != null)
             playerController.enabled = true;
 
+        yield return new WaitForSeconds(0.2f);
         if (oreMiner != null)
             oreMiner.isExpectancyActive = false;
 
