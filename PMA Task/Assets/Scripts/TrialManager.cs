@@ -5,11 +5,12 @@ using UnityEngine.UI;
 using StarterAssets;
 using System;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class TrialManager : MonoBehaviour
 {
     [Header("Trial Settings")]
-    public int totalTrials = 40;
+    public int totalTrials = 30;
         /**************************************************************************
      * CHANGE: Add ranges for free movement and decision movement times
      * Reason: Jittered time ranges
@@ -107,6 +108,9 @@ void Awake()
         Debug.Log("All trials complete!");
         foreach (var line in dataLog)
             Debug.Log(line);
+
+        // Load Thank You scene
+        SceneManager.LoadScene("ThankYou");   
     }
 
     IEnumerator DoTrial(int trialNum) //Each trial: Free movement -> Storm sound -> Expectancy -> Decision movement -> Possible shock
