@@ -6991,6 +6991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
   escapeScene: OptionsPage
   quitOnEscape: 0
+  U: {fileID: 364682182}
 --- !u!4 &1193670680
 Transform:
   m_ObjectHideFlags: 0
@@ -17821,7 +17822,6 @@ MonoBehaviour:
   mineCooldown: 1
   pointsThisTrial: 0
   scoreUI: {fileID: 456497161}
-  U: {fileID: 0}
   trialManager: {fileID: 17980180}
   isExpectancyActive: 0
   IsMining: 0

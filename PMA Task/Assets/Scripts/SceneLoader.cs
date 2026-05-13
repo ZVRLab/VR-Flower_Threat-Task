@@ -6,12 +6,19 @@ public class SceneLoader : MonoBehaviour
     
     [Header("Optional Escape Behavior")]
     public string escapeScene; // set per scene in Inspector
-    public bool quitOnEscape = false; //This is set as true for the Main Menu scene, as this will quit the game entirely. 
+    public bool quitOnEscape = false; //This is set as true for the Main Menu scene, as this will quit the game entirely.
+    public UDPSender U; 
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+        // Send "G" when escaping Platform scene
+        if (SceneManager.GetActiveScene().name == "PlatformTask")
+        {
+            UDPSender.sendString("G");
+        }
+
             if (quitOnEscape) //If on Main Menu (because this is marked true in the inspector)
             {
                 QuitGame();

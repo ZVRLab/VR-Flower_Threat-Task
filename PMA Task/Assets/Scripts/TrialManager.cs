@@ -36,6 +36,10 @@ public class TrialManager : MonoBehaviour
     private string folderPath;
     //UDPSender comunicator
 	public UDPSender U;
+    //UDP G: Start game, end game, zone entries
+    //UDP S: Shock received
+    //UDP M: Storm cue 
+    //UDP N: Safe in shelter (no shock received)
 
 
     [Header("Environment")]
@@ -108,6 +112,7 @@ void Awake()
         Debug.Log("All trials complete!");
         foreach (var line in dataLog)
             Debug.Log(line);
+            UDPSender.sendString("G");
 
         // Load Thank You scene
         SceneManager.LoadScene("ThankYou");   
@@ -140,8 +145,8 @@ void Awake()
     // Play warning immediately if this is a storm trial and have storm clouds roll in
     if (stormActive)
     {
-        //UDP sender code G for storm cue
-        UDPSender.sendString("G");
+        //UDP sender code M for storm cue
+        UDPSender.sendString("M");
         warningSound.Play();
 
         //Document when the storm sound happened
@@ -204,9 +209,7 @@ else if (!enteredShelterDuringDecision && playerInMining)
         // Wait one physics frame to ensure trigger updates have processed
         yield return new WaitForFixedUpdate();
 
-        if (!playerInShelter) {
-    //sends message to UDPServer script for shock
-    UDPSender.sendString("S");	        
+        if (!playerInShelter) {     
 yield return StartCoroutine(ApplyShocks());
     shocked = true;
     //Document when the shock happened
@@ -396,9 +399,9 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
         //Freeze walking/rotation
         playerController.canMove = false;
         
-        for (int i = 0; i < 5; i++) //Once per second for 5 seconds
+        for (int i = 0; i < 3; i++) //Once per second for 3 seconds
         {
-            //Have some way to connect to biopac 
+            UDPSender.sendString("S"); // Send trigger for each shock
             Debug.Log("Shock!");
             yield return new WaitForSeconds(1f);
         }
@@ -433,6 +436,7 @@ public void SetPlayerInShelter(bool inside)
     {
         sw.WriteLine("{0}, {1}, {2} Shelter, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, shelterState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
+    UDPSender.sendString("G");
     }
 
     public void SetPlayerInMining(bool inside)
@@ -447,6 +451,7 @@ public void SetPlayerInShelter(bool inside)
     {
         sw.WriteLine("{0}, {1}, {2} Mine, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, mineState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
+    UDPSender.sendString("G");
     }
   // Smoothly fade the directional light intensity during a storm trial
     IEnumerator FadeLightIntensity(Light light, float start, float end, float duration)
