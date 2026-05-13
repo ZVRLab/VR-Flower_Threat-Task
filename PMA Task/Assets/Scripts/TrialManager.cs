@@ -36,7 +36,7 @@ public class TrialManager : MonoBehaviour
     private string folderPath;
     //UDPSender comunicator
 	public UDPSender U;
-    //UDP G: Start game, end game, zone entries
+    //UDP G: Start game, end game, zone entries and exits
     //UDP S: Shock received
     //UDP M: Storm cue 
     //UDP N: Safe in shelter (no shock received)
