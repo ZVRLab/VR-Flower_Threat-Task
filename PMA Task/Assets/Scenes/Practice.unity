@@ -289,7 +289,10 @@ PrefabInstance:
       value: 1.14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1671758133625024, guid: 36d1fedae9f36dc4e95fc4f8ca4e9ac6, type: 3}
+    - {fileID: 1874688915040734, guid: 36d1fedae9f36dc4e95fc4f8ca4e9ac6, type: 3}
+    - {fileID: 1138198355472160, guid: 36d1fedae9f36dc4e95fc4f8ca4e9ac6, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4350853436349194, guid: 36d1fedae9f36dc4e95fc4f8ca4e9ac6, type: 3}
       insertIndex: -1
@@ -5459,7 +5462,6 @@ MonoBehaviour:
   mineCooldown: 1
   pointsThisTrial: 0
   scoreUI: {fileID: 1954518698}
-  U: {fileID: 0}
   trialManager: {fileID: 0}
   isExpectancyActive: 0
   IsMining: 0
@@ -6928,6 +6930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
   escapeScene: OptionsPage
   quitOnEscape: 0
+  U: {fileID: 0}
 --- !u!4 &2067149946
 Transform:
   m_ObjectHideFlags: 0
