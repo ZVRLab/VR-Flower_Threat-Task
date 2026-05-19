@@ -18,7 +18,7 @@ public class PlayerDataLogging : MonoBehaviour
         folderPath = FolderManager.Instance.SessionFolderPath;
         filePath = Path.Combine(folderPath, fileName);
         // Write header row
-        logLines.Add("Trial\tStorm\tShock\tExpectancy\tPreStormLocation(0=inbetween;1=house;2=mine)\tStormEndLocation(0=inbetween;1=house;2=mine)\tPoints\tMiningTime\tShelterTime\tTimeNotInShelterMining\tTimeFacingHouse\tTimeFacingMine\tTimeToSafeHouse(-77=Started in shelter; -88=Did not reach shelter; -99=Stayed mining)");
+        logLines.Add("Trial\tStorm\tShock\tExpectancy\tPreStormLocation(0=inbetween;1=house;2=mine)\tStormEndLocation(0=inbetween;1=house;2=mine)\tPoints\tMiningTime\tShelterTime\tTimeNotInShelterMining\tTimeFacingShelter\tTimeFacingMiningArea\tTimeToShelter(-77=Started in shelter; -88=Did not reach shelter; -99=Stayed mining)");
     }
 
     //Add row of trial data
