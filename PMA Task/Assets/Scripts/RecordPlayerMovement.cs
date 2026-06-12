@@ -78,7 +78,7 @@ public class RecordPlayerMovement : MonoBehaviour
             Vector3 forward = player.forward;
             
             // Record X and Z position, rotation Y (yaw rotation; rotating left or right), and forward direction X and Z (where player is facing)
-            string line = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{rotY:F1},{forward.x:F3},{forward.z:F3}\n";
+            string line = $"{trialNumber},{stormFlag},{GameTimer.Elapsed:F2},{pos.x:F3},{pos.z:F3},{rotY:F1},{forward.x:F3},{forward.z:F3}\n";
             File.AppendAllText(filePath, line);
 
             // * Added: Log facing data with shelter status and ore status CEAV
@@ -103,7 +103,7 @@ public class RecordPlayerMovement : MonoBehaviour
                 if (inShelter == 1)
                 {
                     // * If inside shelter, leave shelter-facing columns blank CEAV
-                    facingLine = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{inShelter},,,,{oreDot:F3},{facingOre}\n";
+                    facingLine = $"{trialNumber},{stormFlag},{GameTimer.Elapsed:F2},{pos.x:F3},{pos.z:F3},{inShelter},,,,{oreDot:F3},{facingOre}\n";
                 }
                 else
                 {
@@ -118,7 +118,7 @@ public class RecordPlayerMovement : MonoBehaviour
                     facingShelterCount++;
                     }
 
-                    facingLine = $"{trialNumber},{stormFlag},{Time.time:F2},{pos.x:F3},{pos.z:F3},{inShelter},{shelterDot:F3},{facingShelter},{oreDot:F3},{facingOre}\n";
+                    facingLine = $"{trialNumber},{stormFlag},{GameTimer.Elapsed:F2},{pos.x:F3},{pos.z:F3},{inShelter},{shelterDot:F3},{facingShelter},{oreDot:F3},{facingOre}\n";
                 }
                 File.AppendAllText(facingFilePath, facingLine);
             }

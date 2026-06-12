@@ -65,7 +65,7 @@ public class OreMiner : MonoBehaviour
                     int trialNum = trialManager.CurrentTrial;
                 using (StreamWriter sw = new StreamWriter(pointPath, true))
             {
-                sw.WriteLine("{0}, {1}, Points {2}, Trial {3}", Time.time, DateTime.Now, pointsThisTrial, trialNum + 1); //(Added a point to trial because it started at 0)
+                sw.WriteLine("{0}, {1}, Points {2}, Trial {3}", GameTimer.Elapsed, DateTime.Now, pointsThisTrial, trialNum + 1); //(Added a point to trial because it started at 0)
             }
         }
         

@@ -40,6 +40,7 @@ public class TrialManager : MonoBehaviour
     //UDP S: Shock received
     //UDP M: Storm cue 
     //UDP N: Safe in shelter (no shock received)
+    private bool initialized;
 
 
     [Header("Environment")]
@@ -68,11 +69,14 @@ public class TrialManager : MonoBehaviour
     
 void Awake() 
 {
-    
+    GameTimer.MarkSceneStart();
+    Debug.Log("Elapsed " + GameTimer.Elapsed);
 }
     void Start()
     { 
+        Debug.Log("Elapsed " + GameTimer.Elapsed);
         folderPath = FolderManager.Instance.SessionFolderPath;
+        initialized = true; 
         
         //UDP sender code G for start cue
         UDPSender.sendString("G");
@@ -153,7 +157,7 @@ void Awake()
     string stormPath = Path.Combine(folderPath, "StormFile.txt");
     using (StreamWriter sw = new StreamWriter(stormPath, true))
     {
-        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, Position ({2:F2}, {3:F2}, {4:F2})", GameTimer.Elapsed, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
        // Initial Behavior Code (where they were when the trial started)
@@ -217,7 +221,7 @@ yield return StartCoroutine(ApplyShocks());
     string shockPath = Path.Combine(folderPath, "ShockFile.txt");
     using (StreamWriter sw = new StreamWriter(shockPath, true))
     {
-        sw.WriteLine("{0}, {1}, SHOCK RECEIVED, Location: {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, shockLocation, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, SHOCK RECEIVED, Location: {2}, Position ({3:F2}, {4:F2}, {5:F2})", GameTimer.Elapsed, DateTime.Now, shockLocation, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     }
         else {
@@ -229,7 +233,7 @@ yield return StartCoroutine(ApplyShocks());
     string noshockPath = Path.Combine(folderPath, "ShockFile.txt");
     using (StreamWriter sw = new StreamWriter(noshockPath, true))
     {
-        sw.WriteLine("{0}, {1}, NO SHOCK, Location: {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, safeLocation, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, NO SHOCK, Location: {2}, Position ({3:F2}, {4:F2}, {5:F2})", GameTimer.Elapsed, DateTime.Now, safeLocation, playerPosition.x, playerPosition.y, playerPosition.z);
     }
         }
     }
@@ -304,7 +308,7 @@ yield return StartCoroutine(ApplyShocks());
 string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.txt");
     using (StreamWriter sw = new StreamWriter(expectancyAppearsPath, true))
 {
-    sw.WriteLine("{0}, {1}, Expectancy APPEARS, Position ({2:F2}, {3:F2}, {4:F2})", Time.time, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
+    sw.WriteLine("{0}, {1}, Expectancy APPEARS, Position ({2:F2}, {3:F2}, {4:F2})", GameTimer.Elapsed, DateTime.Now, playerPosition.x, playerPosition.y, playerPosition.z);
 }
     
 
@@ -319,7 +323,7 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
     string expectancyPath = Path.Combine(folderPath, "ExpectancyRatingFile.txt");
     using (StreamWriter sw = new StreamWriter(expectancyPath, true))
 {
-    sw.WriteLine("{0}, {1}, Expectancy RATED {2}, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
+    sw.WriteLine("{0}, {1}, Expectancy RATED {2}, Position ({3:F2}, {4:F2}, {5:F2})", GameTimer.Elapsed, DateTime.Now, expectancyValue, playerPosition.x, playerPosition.y, playerPosition.z);
 }
 
     // Hide the panel and re-enable movement and mining and counting the time spent facing house or mine
@@ -413,6 +417,9 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
 //Detect whether player is in shelter or mining area. This uses ZoneDetector.cs
 public void SetPlayerInShelter(bool inside)
     {
+         if (!initialized)
+        return;
+
         // Detect ENTER event
     if (inside && !playerInShelter)
     {
@@ -434,13 +441,17 @@ public void SetPlayerInShelter(bool inside)
         string shelterState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
-        sw.WriteLine("{0}, {1}, {2} Shelter, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, shelterState, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, {2} Shelter, Position ({3:F2}, {4:F2}, {5:F2})", GameTimer.Elapsed, DateTime.Now, shelterState, playerPosition.x, playerPosition.y, playerPosition.z);
+        Debug.Log("Writing EnterExit to: " + enterexitPath + " at t=" + GameTimer.Elapsed);
     }
     UDPSender.sendString("G");
     }
 
     public void SetPlayerInMining(bool inside)
     {
+         if (!initialized)
+        return;
+
         playerInMining = inside;
         Debug.Log("Mining status: " + inside);
 
@@ -449,7 +460,7 @@ public void SetPlayerInShelter(bool inside)
         string mineState = inside ? "ENTER" : "EXIT";
     using (StreamWriter sw = new StreamWriter(enterexitPath, true))
     {
-        sw.WriteLine("{0}, {1}, {2} Mine, Position ({3:F2}, {4:F2}, {5:F2})", Time.time, DateTime.Now, mineState, playerPosition.x, playerPosition.y, playerPosition.z);
+        sw.WriteLine("{0}, {1}, {2} Mine, Position ({3:F2}, {4:F2}, {5:F2})", GameTimer.Elapsed, DateTime.Now, mineState, playerPosition.x, playerPosition.y, playerPosition.z);
     }
     UDPSender.sendString("G");
     }
