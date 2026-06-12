@@ -57,6 +57,8 @@ public class TrialManager : MonoBehaviour
     private float timeInShelter = 0f;
     private float timeNotInZones = 0f;
 
+    private bool firstShelterEntrySkipped = false;
+
     private bool playerInShelter = false;
     public bool PlayerInShelter => playerInShelter; // * Added: public read-only access for other scripts CEAV
     private bool playerInMining = false;
@@ -423,6 +425,14 @@ public void SetPlayerInShelter(bool inside)
         // Detect ENTER event
     if (inside && !playerInShelter)
     {
+        // Skip the very first enter (player spawns in shelter)
+        if (!firstShelterEntrySkipped)
+        {
+            firstShelterEntrySkipped = true;
+            playerInShelter = inside;
+            return;  // skip logging and UDP, just set state
+        }
+        
         // Only count if during decision phase AND started outside
         if (startedOutsideShelter && !enteredShelterDuringDecision)
         {
