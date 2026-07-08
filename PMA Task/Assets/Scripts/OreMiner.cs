@@ -20,6 +20,7 @@ public class OreMiner : MonoBehaviour
     public bool isExpectancyActive = false; //Can't accidentally mine when making expectancy selection
     private string folderPath;
     public bool IsMining;
+    public AudioSource miningSound;
 
     void Awake()
     {
@@ -55,6 +56,7 @@ public class OreMiner : MonoBehaviour
 
     void MineOre()
     {
+        miningSound.Play();
         pointsThisTrial++;
         lastMineTime = Time.time;
 
