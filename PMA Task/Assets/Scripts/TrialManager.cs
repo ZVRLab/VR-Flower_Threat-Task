@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class TrialManager : MonoBehaviour
 {
     [Header("Trial Settings")]
-    public int totalTrials = 30;
+    public int totalTrials = 40;
         /**************************************************************************
      * CHANGE: Add ranges for free movement and decision movement times
      * Reason: Jittered time ranges
