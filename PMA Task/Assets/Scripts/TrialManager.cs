@@ -185,7 +185,7 @@ void Awake()
     //PHASE 4 - DECISION MOVEMENT ******************************************************
    stormClouds.Play();
    rainStorm.Play();
-    StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 1.0f, stormDuration));
+    StartCoroutine(FadeLightIntensity(directionalLight, 1.4f, 0.7f, stormDuration));
 
     // --- Initialize TimeToSafeHouse tracking ---
 startedOutsideShelter = !playerInShelter;
