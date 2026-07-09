@@ -12566,7 +12566,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -12803,7 +12803,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.01
+      scalar: 0.03
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -12856,7 +12856,7 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -12909,7 +12909,7 @@ ParticleSystem:
     startSizeZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.95
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -17333,6 +17333,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 432462375}
     m_Modifications:
+    - target: {fileID: 1587960843564266, guid: 45775b024fd64674bab6655bde5115ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1923833813363800, guid: 45775b024fd64674bab6655bde5115ef, type: 3}
       propertyPath: m_Name
       value: CrystalCluster
@@ -17399,7 +17403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 108675887057874896, guid: 45775b024fd64674bab6655bde5115ef, type: 3}
       propertyPath: m_Intensity
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17811,6 +17815,7 @@ MonoBehaviour:
   isExpectancyActive: 0
   IsMining: 0
   miningSound: {fileID: 1908789162}
+  miningEffect: {fileID: 1563519113}
 --- !u!65 &1908789160
 BoxCollider:
   m_ObjectHideFlags: 0

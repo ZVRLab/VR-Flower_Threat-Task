@@ -21,6 +21,7 @@ public class OreMiner : MonoBehaviour
     private string folderPath;
     public bool IsMining;
     public AudioSource miningSound;
+    public ParticleSystem miningEffect;
 
     void Awake()
     {
@@ -33,6 +34,19 @@ public class OreMiner : MonoBehaviour
     void Update()
     {
         IsMining = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive;
+
+        // Turn mining effects on/off based on whether the player is mining
+    if (miningEffect != null)
+    {
+        if (IsMining && !miningEffect.isPlaying)
+        {
+            miningEffect.Play();
+        }
+        else if (!IsMining && miningEffect.isPlaying)
+        {
+            miningEffect.Stop();
+        }
+    }
 
         // PRACTICE MODE (no points, just "Mining...")
         if (!enableDataLogging)
