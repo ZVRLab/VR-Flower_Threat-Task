@@ -17816,6 +17816,10 @@ MonoBehaviour:
   IsMining: 0
   miningSound: {fileID: 1908789162}
   miningEffect: {fileID: 1563519113}
+  miningLight: {fileID: 2005783677}
+  minLightIntensity: 3
+  maxLightIntensity: 7
+  pulseSpeed: 3
 --- !u!65 &1908789160
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18073,6 +18077,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2878502761c3c4cd185aa9849b4fdb45, type: 3}
+--- !u!108 &2005783677 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 108675887057874896, guid: 45775b024fd64674bab6655bde5115ef, type: 3}
+  m_PrefabInstance: {fileID: 1579870250}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2081974867 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1029693893398121786, guid: ef7f45de93a47486a8d931a69beea72a, type: 3}

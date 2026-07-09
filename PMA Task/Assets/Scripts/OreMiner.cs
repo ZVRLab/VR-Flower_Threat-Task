@@ -23,6 +23,14 @@ public class OreMiner : MonoBehaviour
     public AudioSource miningSound;
     public ParticleSystem miningEffect;
 
+    [Header("Mining Light")]
+public Light miningLight;
+public float minLightIntensity = 4f;
+public float maxLightIntensity = 6f;
+public float pulseSpeed = 3f;
+
+private float lightPulseTime;
+
     void Awake()
     {
          if (enableDataLogging && FolderManager.Instance != null)
@@ -35,6 +43,29 @@ public class OreMiner : MonoBehaviour
     {
         IsMining = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive;
 
+    // Pulse mining light while mining
+if (miningLight != null)
+{
+    if (IsMining)
+    {
+        miningLight.enabled = true;
+
+        lightPulseTime += Time.deltaTime * pulseSpeed;
+
+        float pulse = Mathf.Lerp(
+            minLightIntensity,
+            maxLightIntensity,
+            (Mathf.Sin(lightPulseTime) + 1f) / 2f
+        );
+
+        miningLight.intensity = pulse;
+    }
+    else
+    {
+        miningLight.enabled = false;
+        lightPulseTime = 0f;
+    }
+}
         // Turn mining effects on/off based on whether the player is mining
     if (miningEffect != null)
     {
