@@ -54,8 +54,12 @@ public class TrialManager : MonoBehaviour
     private bool[] stormTrials;
     private List<string> dataLog = new List<string>();
     private float timeSpentMining = 0f;
-    private float timeInShelter = 0f;
-    private float timeNotInZones = 0f;
+    private float timeSpentMining_Baseline = 0f;
+    private float timeSpentMining_Decision = 0f;
+    private float timeInShelter_Baseline = 0f;
+    private float timeInShelter_Decision = 0f;
+    private float timeNotInZones_Baseline = 0f;
+    private float timeNotInZones_Decision = 0f;
 
     private bool firstShelterEntrySkipped = false;
 
@@ -129,9 +133,12 @@ void Awake()
         float timer = 0f;
         bool stormActive = stormTrials[trialNum];
         bool shocked = false;
-        timeSpentMining = 0f;
-        timeInShelter = 0f;
-        timeNotInZones = 0f;
+        timeSpentMining_Baseline = 0f;
+        timeSpentMining_Decision = 0f;
+        timeInShelter_Baseline = 0f;
+        timeInShelter_Decision = 0f;
+        timeNotInZones_Baseline = 0f;
+        timeNotInZones_Decision = 0f;
        float stormDuration = UnityEngine.Random.Range(stormDurationMin, stormDurationMax);
     float freeMovementDuration = UnityEngine.Random.Range(freeMovementMin, freeMovementMax);
 
@@ -267,6 +274,10 @@ yield return StartCoroutine(ApplyShocks());
     }
 
     // --- Log trial ---
+    float totalTimeSpentMining = timeSpentMining_Baseline + timeSpentMining_Decision;
+    float totalTimeInShelter = timeInShelter_Baseline + timeInShelter_Decision;
+    float totalTimeNotInZones = timeNotInZones_Baseline + timeNotInZones_Decision;   
+
     dataLogger.LogTrial(
         trialNum + 1,                // trial #
         stormActive,                 // storm present (Y/N)
@@ -275,9 +286,15 @@ yield return StartCoroutine(ApplyShocks());
         initialBehavior,             //Where they were when trial started
         finalBehavior,               // Where they were when trial ended
         oreMiner.pointsThisTrial,     // points earned
-        timeSpentMining,             // Tracked above in the trial loop
-        timeInShelter,                //Tracked in the trial loop
-        timeNotInZones,              //Time not in shelter or mine. Tracked in trial loop
+        totalTimeSpentMining,             //TOTAL time (baseline + decision period) spent mining
+        totalTimeInShelter,                //TOTAL time (baseline + decision period) in shelter
+        totalTimeNotInZones,              //TOTAL time (baseline + decision period) not in shelter in mine
+        timeSpentMining_Baseline,       //Time spent mining during baseline mining period
+        timeSpentMining_Decision,       //Time spent mining during decision (storm) period
+        timeInShelter_Baseline,         //Time in shelter during baseline mining period
+        timeInShelter_Decision,         //Time in shelter during decision (storm) period
+        timeNotInZones_Baseline,        //Time in between shelter and mine during baseline mining period
+        timeNotInZones_Decision,        //Time in between shelter and mine during baseline mining period
         timeFacingHouse,             //Time spent facing the house
         timeFacingMine,               //Time spent facing the mine
         timeToSafeHouse             //Time taken to get to the house when outside
@@ -346,19 +363,19 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
         movementRecorder.countFacingTime = true;
         float timer = 0f;
         
+    //Track baseline mining period behaviors
     while (timer < duration)
     {
         timer += Time.deltaTime;
 
-        // Track free-movement behaviors 
         if (playerInMining)
-            timeSpentMining += Time.deltaTime;
+            timeSpentMining_Baseline += Time.deltaTime;
 
         if (playerInShelter)
-            timeInShelter += Time.deltaTime;
+            timeInShelter_Baseline += Time.deltaTime;
 
         if (!playerInMining && !playerInShelter)
-            timeNotInZones += Time.deltaTime;
+            timeNotInZones_Baseline += Time.deltaTime;
 
         yield return null;
     }
@@ -374,25 +391,20 @@ string expectancyAppearsPath = Path.Combine(folderPath, "ExpectancyRatingFile.tx
     movementRecorder.countFacingTime = true; 
 
     float timer = 0f;
+
+    //Track decision period behaviors
     while (timer < duration)
     {
         timer += Time.deltaTime;
 
-        //Track how long participant mines during the trial
-        if (playerInMining) 
-        {
-            timeSpentMining += Time.deltaTime;
-        }
-        //Track how long participant is in the shelter during the trial
+        if (playerInMining)
+            timeSpentMining_Decision += Time.deltaTime;
+
         if (playerInShelter)
-        {
-            timeInShelter += Time.deltaTime;
-        }
-        //Track how long participant is not in the shelter or mines
-         if (!playerInMining && !playerInShelter)
-        {
-            timeNotInZones += Time.deltaTime;
-        }
+            timeInShelter_Decision += Time.deltaTime;
+
+        if (!playerInMining && !playerInShelter)
+            timeNotInZones_Decision += Time.deltaTime;
            
 
         yield return null;
