@@ -23,6 +23,9 @@ public class OreMiner : MonoBehaviour
     public AudioSource miningSound;
     public ParticleSystem miningEffect;
 
+private bool wasExpectancyActive = false; // Requires key to be released before mining can trigger again after an expectancy confirmation
+private bool waitingForKeyRelease = false;
+
     [Header("Mining Light")]
 public Light miningLight;
 public float minLightIntensity = 4f;
@@ -41,7 +44,22 @@ private float lightPulseTime;
 
     void Update()
     {
-        IsMining = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive;
+     // Detect the moment expectancy just ended, and require a fresh key press before mining resumes
+    if (wasExpectancyActive && !isExpectancyActive)
+    {
+        waitingForKeyRelease = true;
+    }
+    wasExpectancyActive = isExpectancyActive;
+
+    if (waitingForKeyRelease)
+    {
+        if (!Input.GetKey(KeyCode.Alpha4))
+        {
+            waitingForKeyRelease = false;
+        }
+    }
+
+    IsMining = canMine && Input.GetKey(KeyCode.Alpha4) && !isExpectancyActive && !waitingForKeyRelease;
 
     // Pulse mining light while mining
 if (miningLight != null)
