@@ -13,7 +13,7 @@ public class PracticeSessionController : MonoBehaviour
     public string thankYouSceneName = "ThankYou";
 
     [Header("Timing")]
-    public float expectancyDelay = 5f;
+    public float expectancyDelay = 3f;
 
     private float miningTimer = 0f;
     private bool expectancyTriggered = false;

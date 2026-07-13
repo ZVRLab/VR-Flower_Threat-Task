@@ -689,7 +689,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -5465,6 +5465,12 @@ MonoBehaviour:
   trialManager: {fileID: 0}
   isExpectancyActive: 0
   IsMining: 0
+  miningSound: {fileID: 0}
+  miningEffect: {fileID: 0}
+  miningLight: {fileID: 0}
+  minLightIntensity: 4
+  maxLightIntensity: 6
+  pulseSpeed: 3
 --- !u!65 &669061289
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6238,7 +6244,7 @@ MonoBehaviour:
   playerController: {fileID: 2069120584}
   U: {fileID: 240828591}
   thankYouSceneName: ThankYou
-  expectancyDelay: 5
+  expectancyDelay: 3
   expectancyCount: 0
   maxExpectancyTrials: 3
 --- !u!4 &1492419941
