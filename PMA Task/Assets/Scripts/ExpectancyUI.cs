@@ -15,6 +15,9 @@ public class ExpectancyUI : MonoBehaviour
     private float keyHoldTimer = 0f;
     public float keyHoldDelay = 0.15f; // Adjust this value to control speed
 
+    //Require the player to move the slider before they can input their selection (to avoid accidentally clicking the button after mining)
+    private bool hasMovedSlider = false;
+
     void Start()
     {
         expectancySelected = false;
@@ -41,6 +44,7 @@ public class ExpectancyUI : MonoBehaviour
                     expectancyValue = Mathf.Max(0, expectancyValue - 1);
                     expectancySlider.value = expectancyValue;
                     keyHoldTimer = 0f;
+                    hasMovedSlider = true;
                 }
             }
             else if (Input.GetKey(KeyCode.Alpha3))
@@ -51,6 +55,7 @@ public class ExpectancyUI : MonoBehaviour
                     expectancyValue = Mathf.Min(10, expectancyValue + 1);
                     expectancySlider.value = expectancyValue;
                     keyHoldTimer = 0f;
+                    hasMovedSlider = true;
                 }
             }
             else
@@ -58,7 +63,7 @@ public class ExpectancyUI : MonoBehaviour
                 keyHoldTimer = 0f;
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha4))
+            if (hasMovedSlider && Input.GetKeyDown(KeyCode.Alpha4))
             {
                 expectancySelected = true;
                 Debug.Log("Expectancy confirmed: " + expectancyValue);
@@ -80,6 +85,7 @@ public class ExpectancyUI : MonoBehaviour
         expectancyValue = 5; // reset to middle each trial
         expectancySelected = false;
         expectancySlider.value = 5;
+        hasMovedSlider = false;
         UpdateExpectancyText();
     }
 }
